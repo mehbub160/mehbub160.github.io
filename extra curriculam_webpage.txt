@@ -1,0 +1,62 @@
+<section id="resume" class="resume">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Extra Curriculum Activities</h2>
+          <p>I am actively participating in voluntary activities.</p>
+        </div>
+
+        <div class="row">
+                     
+          <div class="col-lg-6" data-aos="fade-up">
+           <h3 class="resume-title">With IEEE</h3>
+            <div class="resume-item pb-0">
+              <h4>Ambassador IEEEXtreme 16.0</h4>
+                                         <h5>2022</h5> 
+                <p> <a href="https://ieeextreme.org//">IEEEXtreme </a></p>                          
+              </div>
+
+          
+            <div class="resume-item">
+                 <h3 class="resume-title">With IIIT Guwahati</h3>
+              <h4>General Secreraty (Welfare), SGC</h4> 
+                                    <h5>2022</h5> 
+              <h4>General Secreraty (Sports), SGC,</h4>
+                <h5>2022</h5>  
+                <h4>Member of Institute Students' Disiplinary Committee (ISDC)</h4>   
+                                    <h5>2022</h5> 
+                <h4>Member of Internal Committee (IC)</h4>    
+                                    <h5>2022</h5> 
+                <h4>Member of Departmental Post Graduate Program Committee (DPPC)</h4>     
+                                    <h5>2022</h5> 
+                                    
+              <p> <a href="https://www.iiitg.ac.in/">Indian Institute of Information Technology Guwahati</a></p>                     
+                                  
+            </div>
+          <div class="resume-item">
+                                
+                                  <h3 class="resume-title">With NEHU</h3>
+              <h4>Finance Secreraty of CIPHER</h4> 
+               <h5><em>CIPHER is the forum of IT department, NEHU, Shillong</em></h5>                    
+                 <h5>2014-15</h5> 
+              <h4>Finance Secretary of ANAKALYPSI’14</h4>
+                                  
+                   <h5><em>ANAKALYPSI is the technical festival of NEHU, Shillong</em></h5> 
+                                                          <h5>2014</h5> 
+                 
+                <h4>Executive Member of CREATIVE TEAM, ANAKALYPSI’14</h4> 
+                                   <h5>2014</h5> 
+                <h4>Student Volunteer and participant of i3cs'2016 </h4> 
+                    <h5><em> i3cs: International Conference on Computing and  Communication System</em></h5>
+                                  <h5>2016</h5> 
+                  <h4>Student Volunteer and participant of i3cs'2015 </h4> 
+                                                          
+                                  <h5>2015</h5>                 
+                                 
+            </div>                                          
+            </div>
+           </div>          
+        
+       </div>                                               
+      </div>
+    </section><!-- End Resume Section -->  
