@@ -19,7 +19,7 @@ form.addEventListener('submit', (e) => {
     '","embeds":null,"attachments":[]}';
 
   fetch(
-    'https://discord.com/api/v10/webhooks/1051893959431049317/oPkWTpmwtcmW3Jmn-bI5I_L4qEaIGlgBIIDqZiPDqIKxMectcohT4G18FaihX02lg9AS?wait=true',
+    'https://discord.com/api/webhooks/1055383889562062868/Fgre0ggknvBc6do6Kixr1FWZHY_ZcFceMbY-4FTNzeN9_dCxgtKCMDn7uWkxCsUpUiRd',
     {
       headers: {
         accept: 'application/json',
