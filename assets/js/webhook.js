@@ -42,7 +42,7 @@ form.addEventListener('submit', (e) => {
     }
   )
     .then(() => {
-      alert('Email sent succeaafully');
+      alert('Email sent successfully');
       form.reset();
     })
     .catch((e) => {
