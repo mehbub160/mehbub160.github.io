@@ -43,6 +43,7 @@ form.addEventListener('submit', (e) => {
   )
     .then(() => {
       alert('Email sent succeaafully');
+      form.reset();
     })
     .catch((e) => {
       alert('Could not send email');
