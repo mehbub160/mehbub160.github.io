@@ -5,72 +5,6 @@
 
 
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skills Section</title>
-  <style>
-    .section-bg {
-      background-color: f8f9fa;
-      padding: 40px 0;
-    }
-    .section-title h2 {
-      text-align: center;
-      margin-bottom: 32px;
-      font-size: 24px;
-    }
-    .row {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    .col-lg-4 {
-      flex: 0 0 30%;
-      max-width: 30%;
-      background: #fff;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      border-radius: 10px;
-    }
-    .skill-category {
-      text-align: center;
-    }
-    .skill-category h4 {
-      margin-bottom: 20px;
-      font-size: 24px;
-      color: #333;
-    }
-    .skills-list {
-      list-style: none;
-      padding: 0;
-      animation: dropItems 2s ease-out forwards;
-    }
-    .skills-list li {
-      font-size: 18px;
-      margin: 10px 0;
-      opacity: 0;
-      animation: fadeIn 0.5s ease-in-out forwards;
-      animation-delay: var(--delay);
-      color: var(--color);
-    }
-    /* Drop animation for items */
-    @keyframes dropItems {
-      from {
-        transform: translateY(-50px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
-  </style>
-
-
 
 
   
@@ -295,17 +229,13 @@
       <h2>Skills</h2>
     </div>
 
-    <div class="row">
+    <div class="row justify-content-center">
       <div class="col-lg-4" data-aos="fade-up">
 
         <div class="skill-category">
           <h4><strong>PROGRAMMING LANGUAGES</strong></h4>
           <ul class="skills-list">
-            <li style="--delay: 0.1s; --color: red;">C</li>
-            <li style="--delay: 0.2s; --color: blue;">C++</li>
-            <li style="--delay: 0.3s; --color: green;">Java</li>
-            <li style="--delay: 0.4s; --color: orange;">Python</li>
-            <li style="--delay: 0.5s; --color: purple;">HTML</li>
+            <li>C</li><li>C++</li><li>Java</li><li>Python</li><li>HTML</li>
           </ul>
         </div>
 
@@ -316,13 +246,7 @@
         <div class="skill-category">
           <h4><strong>TOOLS</strong></h4>
           <ul class="skills-list">
-            <li style="--delay: 0.1s; --color: red;">NetSim</li>
-            <li style="--delay: 0.2s; --color: blue;">iFogSim</li>
-            <li style="--delay: 0.3s; --color: green;">MobFogSim</li>
-            <li style="--delay: 0.4s; --color: orange;">QGIS</li>
-            <li style="--delay: 0.5s; --color: purple;">MATLAB</li>
-            <li style="--delay: 0.6s; --color: cyan;">WorkFlowSim</li>
-            <li style="--delay: 0.7s; --color: magenta;">CloudSim</li>
+            <li>NetSim</li><li>iFogSim</li><li>MobFogSim</li><li>QGIS</li><li>MATLAB</li><li>WorkFlowSim</li><li>CloudSim</li>
           </ul>
         </div>
 
@@ -333,8 +257,7 @@
         <div class="skill-category">
           <h4><strong>OPERATING SYSTEMS</strong></h4>
           <ul class="skills-list">
-            <li style="--delay: 0.1s; --color: red;">Linux</li>
-            <li style="--delay: 0.2s; --color: blue;">Windows</li>
+            <li>Linux</li><li>Windows</li>
           </ul>
         </div>
 
@@ -342,8 +265,6 @@
     </div>
   </div>
 </section><!-- End Skills Section -->
-
-      
         
         
 
