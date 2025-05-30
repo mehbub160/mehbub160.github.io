@@ -965,7 +965,28 @@
 
 
 <!-- Load Particles.js Library -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+  particlesJS("particles-left", {
+    particles: {
+      number: { value: 30 },
+      size: { value: 6 },
+      color: {
+        value: ["#E63946", "#F1FAEE", "#A8DADC", "#457B9D", "#1D3557"]
+      },
+      shape: { type: "circle" },
+      opacity: { value: 0.4 },
+      line_linked: { enable: false },
+      move: { speed: 1.5 }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "repulse" }
+      }
+    }
+  });
+</script>
+
 
 <!-- Initialize Sidebar Bubbles Effect -->
 <script>
@@ -973,7 +994,9 @@
     particles: {
       number: { value: 30 },
       size: { value: 5 },
-      color: { value: "#ffffff" },
+      color: {
+                value: ["#E63946", "#F1FAEE", "#A8DADC", "#457B9D", "#1D3557"]
+              },
       shape: { type: "circle" },
       opacity: { value: 0.3 },
       line_linked: { enable: false },
