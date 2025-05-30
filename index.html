@@ -110,11 +110,7 @@
 
   <!-- ======= Header ======= -->
   <header id="header">
-    
-<div id="sidebar-with-bubbles" style="position: relative; overflow: hidden;">
-  <div id="particles-left" style="position: absolute; width: 100%; height: 100%; z-index: -1;"></div>
-  <div class="d-flex flex-column">
-
+    <div class="d-flex flex-column">
 
       <div class="profile">
         <img src="assets/img/2 crop.jpg" alt="" class="img-fluid rounded-circle">
@@ -162,7 +158,7 @@
   </section>
    <!-- End Hero -->
 
-  <main id="main" style="margin-left: 350px;">
+  <main id="main">
 
     <!-- ======= About Section ======= -->
     <section id="about" class="about">
@@ -921,7 +917,13 @@
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer">
+  
+<!-- Bubbles effect at bottom -->
+<div id="bubble-effect" style="height: 300px; position: relative; z-index: 0;">
+  <div id="particles-bubble" style="position: absolute; width: 100%; height: 100%; z-index: -1;"></div>
+</div>
+
+<footer id="footer">
     <div class="container">
       <div class="copyright">
         &copy; Copyright <strong><span>Mehbub Alam</span></strong>
@@ -965,47 +967,41 @@
 
 
 <!-- Load Particles.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<!-- Initialize Bottom Bubbles Effect -->
 <script>
-  particlesJS("particles-left", {
-    particles: {
-      number: { value: 30 },
-      size: { value: 6 },
-      color: {
-        value: ["#E63946", "#F1FAEE", "#A8DADC", "#457B9D", "#1D3557"]
+  particlesJS("particles-bubble", {
+    "particles": {
+      "number": {
+        "value": 40
       },
-      shape: { type: "circle" },
-      opacity: { value: 0.4 },
-      line_linked: { enable: false },
-      move: { speed: 1.5 }
-    },
-    interactivity: {
-      detect_on: "canvas",
-      events: {
-        onhover: { enable: true, mode: "repulse" }
+      "size": {
+        "value": 6
+      },
+      "shape": {
+        "type": "circle"
+      },
+      "opacity": {
+        "value": 0.5
+      },
+      "color": {
+        "value": "#00bfff"
+      },
+      "line_linked": {
+        "enable": false
+      },
+      "move": {
+        "speed": 2
       }
-    }
-  });
-</script>
-
-
-<!-- Initialize Sidebar Bubbles Effect -->
-<script>
-  particlesJS("particles-left", {
-    particles: {
-      number: { value: 30 },
-      size: { value: 5 },
-      color: {
-                value: ["#E63946", "#F1FAEE", "#A8DADC", "#457B9D", "#1D3557"]
-              },
-      shape: { type: "circle" },
-      opacity: { value: 0.3 },
-      line_linked: { enable: false },
-      move: { speed: 1 }
     },
-    interactivity: {
-      detect_on: "canvas",
-      events: {
-        onhover: { enable: true, mode: "repulse" }
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": {
+        "onhover": {
+          "enable": true,
+          "mode": "repulse"
+        }
       }
     }
   });
