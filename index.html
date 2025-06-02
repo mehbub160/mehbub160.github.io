@@ -970,39 +970,29 @@
 <!-- Load Particles.js Library -->
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
-<!-- Initialize Bottom Bubbles Effect -->
+<!-- Bubbles effect at bottom -->
+<div id="bubble-effect" style="height: 300px; position: relative; z-index: 0;">
+  <div id="particles-bubble" style="position: absolute; width: 100%; height: 100%; z-index: -1;"></div>
+</div>
+
+<!-- Initialize Colorful Bubbles -->
 <script>
   particlesJS("particles-bubble", {
     "particles": {
-      "number": {
-        "value": 40
-      },
-      "size": {
-        "value": 6
-      },
-      "shape": {
-        "type": "circle"
-      },
-      "opacity": {
-        "value": 0.5
-      },
+      "number": { "value": 40 },
+      "size": { "value": 6 },
+      "shape": { "type": "circle" },
+      "opacity": { "value": 0.5 },
       "color": {
-        "value": "#00bfff"
+        "value": ["#ff5f6d", "#ffc371", "#7ee8fa", "#eec0c6", "#00bfff"]
       },
-      "line_linked": {
-        "enable": false
-      },
-      "move": {
-        "speed": 2
-      }
+      "line_linked": { "enable": false },
+      "move": { "speed": 2 }
     },
     "interactivity": {
       "detect_on": "canvas",
       "events": {
-        "onhover": {
-          "enable": true,
-          "mode": "repulse"
-        }
+        "onhover": { "enable": true, "mode": "repulse" }
       }
     }
   });
