@@ -13,9 +13,9 @@
 <meta content="English" name="language"/>
 <meta content="15 days" name="revisit-after"/>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
-<meta content="sya1BoCcnR9AraFbvz4AdXtN7Qe-vERp4hBuEwYEmIo" name="google-site-verification">
+<meta content="sya1BoCcnR9AraFbvz4AdXtN7Qe-vERp4hBuEwYEmIo" name="google-site-verification"/>
 <!-- Open Graph (OG) Tags for social sharing -->
-<meta content="Dr. Mehbub Alam | Portfolio" property="og:title"/>
+<meta content="Dr. Mehbub Alam | Portfolio" property="og:title">
 <meta content="Mehbub Alam | Portfolio" property="og:site_name"/>
 <meta content="https://mehbubalam.com" property="og:url"/>
 <meta content="Postdoctoral Researcher at Khalifa University, Abu Dhabi. Specialized in Drone Security and Authentication." property="og:description"/>
@@ -112,47 +112,7 @@
     padding: 3px 8px;
     font-size: 13px;
 }
-</style>
-<style>
-#stats-box {
-    position: fixed;
-    bottom: 30px;
-    right: 20px;
-    background: #f0f0f0;
-    color: #000;
-    padding: 15px 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    font-size: 14px;
-    z-index: 9999;
-    display: none;
-}
-#stats-box h5 {
-    margin-top: 0;
-    margin-bottom: 8px;
-    font-size: 16px;
-    font-weight: 600;
-}
-#stats-box table {
-    width: 100%;
-}
-#stats-box td {
-    padding: 3px 8px;
-    font-size: 13px;
-}
-</style>
-<div id="stats-box">
-  <h5>Research Metrics</h5>
-  <table>
-    <tr><td>Publications:</td><td><strong>13</strong></td></tr>
-    <tr><td>Journals:</td><td><strong>4</strong></td></tr>
-    <tr><td>Conferences:</td><td><strong>7</strong></td></tr>
-    <tr><td>Citations:</td><td><strong>68</strong></td></tr>
-    <tr><td>H-index:</td><td><strong>5</strong></td></tr>
-  </table>
-</div>
-
-</head>
+</style></head>
 <body>
 <!-- ======= Mobile nav toggle button  <a target="_blank" href="https://scholar.google.com/citations?user=rgUnNMsAAAAJ&hl=en&oi=ao" class="googlescholars"><i class="bx bxl-google-scholars"></i></a>======= -->
 <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
@@ -171,9 +131,9 @@
 <a class="googlescholars" href="https://scholar.google.com/citations?user=BFOhVCkAAAAJ&amp;hl=en&amp;oi=sra" target="_blank">
 <link href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons/css/academicons.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" rel="stylesheet"/>
-<link href="/path/to/folder/css/academicons.min.css" rel="stylesheet">
+<link href="/path/to/folder/css/academicons.min.css" rel="stylesheet"/>
 <i class="ai ai-google-scholar"></i>
-</link></a>
+</a>
 <a href="https://www.researchgate.net/profile/Mehbub-Alam-2" target="_blank">
 <!-- <i class="fa-brands fa-researchgate"></i> -->
             Rg
@@ -391,6 +351,15 @@
 </section><!-- End Resume Section -->
 <!-- ======= projects Section ======= -->
 <section class="portfolio section-bg" id="projects">
+
+<div id="research-metrics-box" style="position: absolute; top: 40px; right: 40px; background-color: white; border-radius: 12px; padding: 15px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-family: 'Arial', sans-serif; font-size: 14px; color: #333; z-index: 1000; width: 200px;">
+<strong style="font-size: 16px; display: block; margin-bottom: 10px;">Research Metrics</strong>
+<div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Publications:</span><strong>13</strong></div>
+<div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Journals:</span><strong>4</strong></div>
+<div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Conferences:</span><strong>7</strong></div>
+<div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Citations:</span><strong>68</strong></div>
+<div style="display: flex; justify-content: space-between;"><span>H-index:</span><strong>5</strong></div>
+</div>
 <div class="container">
 <div class="section-title">
 <h2>Research Works:</h2>
@@ -549,8 +518,6 @@
 </li>
 </ol>
 </div>
-
-
 <div class="text-center">
 <a class="btn btn-outline-primary btn-lg" href="List_of_publications_2025.pdf" target="_blank" type="button">List of Publications</a>
 </div>
@@ -833,7 +800,6 @@
     }
   });
 </script>
-
 <div class="stats-box">
 <h5>Research Metrics</h5>
 <table>
@@ -844,17 +810,5 @@
 <tr><td>H-index:</td><td><strong>5</strong></td></tr>
 </table>
 </div>
-
-<script>
-  window.addEventListener("scroll", function() {
-    const metricsBox = document.getElementById("stats-box");
-    const researchSection = document.querySelector("#projects");
-    const rect = researchSection.getBoundingClientRect();
-    const inView = rect.top <= window.innerHeight && rect.bottom >= 0;
-
-    metricsBox.style.display = inView ? "block" : "none";
-  });
-</script>
-
 </body>
 </html>
