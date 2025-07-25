@@ -112,7 +112,30 @@
     padding: 3px 8px;
     font-size: 13px;
 }
+
+
+.animated-gradient-text {
+  font-weight: bold;
+  background: linear-gradient(270deg, #ff6a00, #ee0979, #00c6ff, #43e97b);
+  background-size: 800% 800%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientFlow 8s ease infinite;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 </style></head>
+  
 <body>
 <!-- ======= Mobile nav toggle button  <a target="_blank" href="https://scholar.google.com/citations?user=rgUnNMsAAAAJ&hl=en&oi=ao" class="googlescholars"><i class="bx bxl-google-scholars"></i></a>======= -->
 <i class="bi bi-list mobile-nav-toggle d-xl-none"></i>
@@ -171,9 +194,10 @@
 <p> If you want to master something, teach it. The more you teach, the better you learn. Teaching is a powerful tool to learning ~<em>Prof. Feynman</em></p>
   <p> </p>
 <p> </p>
-  <p class="fst-italic gradient-text" style="margin-top: -10px;">
+  <p class="fst-italic animated-gradient-text" style="margin-top: -10px;">
   I will be joining IIIT Raichur as Assistant Professor, CSE from September 2025.
 </p>
+
 
 </div>
 <div class="row">
