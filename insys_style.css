@@ -177,7 +177,24 @@ nav {
     text-align: center;
     background: rgba(255, 255, 255, 0.03);
 }
-
+.research-cta {
+    padding: 100px 60px;
+    text-align: center;
+    background: #101f3c;
+}
+.cta-btn {
+    display: inline-block;
+    padding: 14px 28px;
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    transition: 0.3s ease;
+}
+.cta-btn:hover {
+    background: #1d4ed8;
+}
 /* CARD LAYOUTS (PRODUCTS/RESOURCES) */
 .card-container, .container {
     display: grid;
