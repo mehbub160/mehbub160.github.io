@@ -1,0 +1,2644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExamPortal – Admin Panel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet" />
+  <!-- SheetJS for Excel export (client-side, no backend needed) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --navy:     #0D1B2A;
+      --navy2:    #1B2E45;
+      --blue:     #2563EB;
+      --blue-lt:  #3B82F6;
+      --sky:      #EFF6FF;
+      --success:  #059669;
+      --danger:   #DC2626;
+      --warning:  #D97706;
+      --orange:   #EA580C;
+      --purple:   #7C3AED;
+      --text:     #0F172A;
+      --muted:    #64748B;
+      --border:   #E2E8F0;
+      --card:     #FFFFFF;
+      --bg:       #F0F5FF;
+      --sidebar-w:240px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text);
+           display:flex; min-height:100vh; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width:var(--sidebar-w); background:var(--navy); flex-shrink:0;
+      display:flex; flex-direction:column;
+      position:fixed; height:100vh; overflow-y:auto;
+    }
+    .sb-brand {
+      padding:1.5rem 1.25rem; border-bottom:1px solid rgba(255,255,255,0.08);
+      font-family:'Outfit',sans-serif; font-size:1.15rem; font-weight:700; color:#fff;
+      display:flex; align-items:center; gap:0.5rem;
+    }
+    .sb-brand span { color:var(--blue-lt); }
+    .sb-role {
+      padding:0.75rem 1.25rem; border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+    .sb-role p { font-size:0.72rem; color:rgba(255,255,255,0.35); margin-bottom:0.2rem;
+                 text-transform:uppercase; letter-spacing:0.06em; }
+    .sb-role strong { color:#fff; font-size:0.9rem; }
+    .sb-nav { flex:1; padding:1rem 0.75rem; display:flex; flex-direction:column; gap:0.25rem; }
+    .sb-link {
+      display:flex; align-items:center; gap:0.65rem;
+      padding:0.65rem 0.75rem; border-radius:9px;
+      font-size:0.88rem; color:rgba(255,255,255,0.6);
+      cursor:pointer; transition:all 0.18s; border:none; background:none;
+      text-align:left; width:100%;
+    }
+    .sb-link:hover { background:rgba(255,255,255,0.08); color:#fff; }
+    .sb-link.active { background:var(--blue); color:#fff; }
+    .sb-link .icon { font-size:1rem; }
+    .sb-link .badge-count {
+      margin-left:auto; background:var(--orange); color:#fff;
+      border-radius:10px; padding:0.1rem 0.45rem; font-size:0.68rem; font-weight:700;
+    }
+    .sb-bottom { padding:0.75rem; border-top:1px solid rgba(255,255,255,0.08); }
+    .sb-logout {
+      display:flex; align-items:center; gap:0.5rem; padding:0.6rem 0.75rem;
+      border-radius:8px; cursor:pointer; color:rgba(255,255,255,0.5);
+      font-size:0.85rem; border:none; background:none; width:100%; transition:all 0.18s;
+    }
+    .sb-logout:hover { background:rgba(220,38,38,0.15); color:#F87171; }
+
+    /* ── MAIN ── */
+    .admin-main { margin-left:var(--sidebar-w); flex:1; padding:2rem; min-height:100vh; }
+    .page-section { display:none; }
+    .page-section.active { display:block; }
+
+    /* ── PAGE TITLE ── */
+    .page-title {
+      font-family:'Outfit',sans-serif; font-size:1.5rem; font-weight:700;
+      color:var(--text); margin-bottom:0.3rem;
+    }
+    .page-sub { font-size:0.875rem; color:var(--muted); margin-bottom:2rem; }
+
+    /* ── STAT CARDS ── */
+    .stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:2rem; }
+    .stat-card {
+      background:var(--card); border-radius:12px; border:1px solid var(--border);
+      padding:1.25rem; display:flex; align-items:center; gap:1rem;
+    }
+    .stat-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; }
+    .stat-icon.blue   { background:#EFF6FF; }
+    .stat-icon.green  { background:#ECFDF5; }
+    .stat-icon.orange { background:#FFF7ED; }
+    .stat-icon.purple { background:#F5F3FF; }
+    .stat-icon.red    { background:#FEF2F2; }
+    .stat-val { font-family:'Outfit',sans-serif; font-size:1.5rem; font-weight:700; }
+    .stat-lbl { font-size:0.78rem; color:var(--muted); }
+
+    /* ── TABLE CARD ── */
+    .table-card {
+      background:var(--card); border-radius:14px; border:1px solid var(--border);
+      overflow:hidden; margin-bottom:1.5rem;
+    }
+    .table-header {
+      display:flex; justify-content:space-between; align-items:center;
+      padding:1rem 1.25rem; border-bottom:1px solid var(--border); background:#F8FAFC;
+    }
+    .table-header h3 { font-family:'Outfit',sans-serif; font-size:0.95rem; font-weight:700; }
+    table { width:100%; border-collapse:collapse; }
+    th {
+      background:#F8FAFC; padding:0.8rem 1.1rem; text-align:left;
+      font-size:0.72rem; font-weight:700; text-transform:uppercase;
+      letter-spacing:0.05em; color:var(--muted); border-bottom:1px solid var(--border);
+    }
+    td { padding:0.85rem 1.1rem; border-bottom:1px solid var(--border); font-size:0.85rem; vertical-align:middle; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:#F8FAFC; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      padding:0.5rem 1rem; border-radius:8px; border:none; font-family:'DM Sans',sans-serif;
+      font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.18s;
+      display:inline-flex; align-items:center; gap:0.35rem;
+    }
+    .btn-primary  { background:var(--blue); color:#fff; }
+    .btn-primary:hover  { background:#1D4ED8; }
+    .btn-success  { background:var(--success); color:#fff; }
+    .btn-success:hover  { background:#047857; }
+    .btn-danger   { background:#FEF2F2; color:var(--danger); border:1px solid #FECACA; }
+    .btn-danger:hover   { background:#FEE2E2; }
+    .btn-edit     { background:#F0FDF4; color:var(--success); border:1px solid #A7F3D0; }
+    .btn-edit:hover     { background:#DCFCE7; }
+    .btn-orange   { background:var(--orange); color:#fff; }
+    .btn-orange:hover   { background:#C2410C; }
+    .btn-sm       { padding:0.35rem 0.75rem; font-size:0.75rem; }
+
+    .badge { display:inline-block; padding:0.2rem 0.55rem; border-radius:5px;
+             font-size:0.7rem; font-weight:700; text-transform:uppercase; }
+    .badge-active   { background:#ECFDF5; color:#059669; }
+    .badge-inactive { background:#F1F5F9; color:var(--muted); }
+    .badge-pass { background:#ECFDF5; color:#059669; }
+    .badge-fail { background:#FEF2F2; color:var(--danger); }
+    .badge-pending  { background:#FFF7ED; color:var(--orange); }
+    .badge-evaluated{ background:#ECFDF5; color:var(--success); }
+    .badge-mcq  { background:#EFF6FF; color:#1D4ED8; }
+    .badge-fill { background:#ECFDF5; color:#065F46; }
+    .badge-short{ background:#FFF7ED; color:#9A3412; }
+
+    /* ── FORM / MODAL ── */
+    .overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.5);
+      display:flex; align-items:center; justify-content:center;
+      z-index:9999; opacity:0; pointer-events:none; transition:opacity 0.2s;
+    }
+    .overlay.show { opacity:1; pointer-events:all; }
+    .form-modal {
+      background:#fff; border-radius:16px; padding:2rem;
+      max-width:580px; width:94%; max-height:90vh; overflow-y:auto;
+      transform:translateY(20px); transition:transform 0.2s;
+      box-shadow:0 20px 60px rgba(0,0,0,0.2);
+    }
+    .overlay.show .form-modal { transform:translateY(0); }
+    .form-title {
+      font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:700;
+      margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;
+    }
+    .close-btn { background:none; border:none; font-size:1.3rem; cursor:pointer; color:var(--muted); line-height:1; }
+    .form-group { margin-bottom:1rem; }
+    label { display:block; font-size:0.78rem; font-weight:700; text-transform:uppercase;
+            letter-spacing:0.04em; color:var(--text); margin-bottom:0.4rem; }
+    input[type="text"],input[type="number"],textarea,select {
+      width:100%; padding:0.65rem 0.9rem; border:1.5px solid var(--border);
+      border-radius:9px; font-family:'DM Sans',sans-serif; font-size:0.9rem;
+      color:var(--text); background:#fff; outline:none; transition:border-color 0.18s;
+    }
+    input:focus,textarea:focus,select:focus { border-color:var(--blue); }
+    textarea { resize:vertical; min-height:80px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .option-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem; }
+    .option-row input { flex:1; }
+    .correct-radio { width:auto !important; padding:0 !important; accent-color:var(--blue); }
+
+    /* ── QUESTION TYPE TOGGLE ── */
+    .qtype-tabs { display:flex; gap:0.5rem; margin-bottom:1.25rem; }
+    .qtype-tab {
+      padding:0.5rem 1rem; border-radius:8px; border:1.5px solid var(--border);
+      font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.18s;
+      background:#F8FAFC; color:var(--muted);
+    }
+    .qtype-tab.active { border-color:var(--blue); background:var(--sky); color:var(--blue); }
+    .qtype-section { display:none; }
+    .qtype-section.visible { display:block; }
+
+    /* ── MANUAL EVAL PANEL ── */
+    .eval-modal {
+      max-width:680px;
+    }
+    .eval-question-text {
+      background:#F8FAFC; border-radius:10px; padding:1rem;
+      font-size:0.9rem; font-weight:500; line-height:1.6;
+      margin-bottom:1rem; border:1px solid var(--border);
+    }
+    .eval-student-answer {
+      background:#FFFBEB; border:1.5px solid #FDE68A; border-radius:10px;
+      padding:1rem; font-size:0.87rem; line-height:1.7;
+      margin-bottom:1.25rem; white-space:pre-wrap; color:var(--text);
+      min-height:80px;
+    }
+    .eval-student-answer.empty {
+      background:#F8FAFC; border-color:var(--border);
+      color:var(--muted); font-style:italic;
+    }
+    .marks-slider-wrap { display:flex; align-items:center; gap:1rem; margin-bottom:0.5rem; }
+    .marks-slider {
+      flex:1; height:6px; -webkit-appearance:none; appearance:none;
+      border-radius:3px; outline:none; cursor:pointer;
+      background:linear-gradient(to right,var(--success) 0%, var(--success) 50%, #E2E8F0 50%, #E2E8F0 100%);
+    }
+    .marks-slider::-webkit-slider-thumb {
+      -webkit-appearance:none; width:20px; height:20px;
+      border-radius:50%; background:var(--success); cursor:pointer;
+      box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    }
+    .marks-display {
+      font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:700;
+      color:var(--success); min-width:60px; text-align:center;
+    }
+    .eval-status-pill {
+      display:inline-flex; align-items:center; gap:0.4rem;
+      padding:0.3rem 0.75rem; border-radius:20px; font-size:0.78rem; font-weight:700;
+    }
+    .eval-status-pill.pending  { background:#FFF7ED; color:var(--orange); border:1px solid #FED7AA; }
+    .eval-status-pill.done     { background:#ECFDF5; color:var(--success); border:1px solid #A7F3D0; }
+
+    /* ── SHORT ANSWER CARDS (Eval section) ── */
+    .eval-card {
+      background:var(--card); border-radius:12px; border:1px solid var(--border);
+      margin-bottom:1rem; overflow:hidden;
+    }
+    .eval-card-header {
+      padding:0.85rem 1.25rem; background:#F8FAFC; border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:0.75rem;
+    }
+    .eval-card-body { padding:1.1rem 1.25rem; }
+    .eval-student-name {
+      font-family:'Outfit',sans-serif; font-weight:700; font-size:0.9rem;
+    }
+    .eval-exam-name { font-size:0.78rem; color:var(--muted); }
+    .eval-q-text {
+      font-weight:500; font-size:0.88rem; color:var(--text); margin-bottom:0.6rem;
+    }
+    .eval-answer-preview {
+      font-size:0.83rem; color:var(--muted); background:#F8FAFC;
+      border-radius:8px; padding:0.65rem 0.85rem; line-height:1.6;
+      border:1px solid var(--border); margin-bottom:0.75rem;
+      display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+    }
+
+    /* Filter row */
+    .filter-row {
+      display:flex; gap:0.75rem; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap;
+    }
+    .filter-row select { flex:1; min-width:160px; max-width:260px; }
+    .empty-state {
+      text-align:center; padding:3rem 1rem; color:var(--muted);
+    }
+    .empty-state .emoji { font-size:3rem; margin-bottom:0.75rem; }
+
+    @media(max-width:768px){
+      .sidebar { transform:translateX(-100%); }
+      .admin-main { margin-left:0; }
+    }
+
+    /* ── STUDENT ACCORDION ── */
+    .accordion-wrap {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .accordion-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      background: #F8FAFC;
+    }
+    .accordion-header-bar h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+    .accordion-search {
+      padding: 0.4rem 0.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      width: 200px;
+      transition: border-color 0.18s;
+    }
+    .accordion-search:focus { border-color: var(--blue); }
+
+    .accordion-item {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .accordion-item:last-child { border-bottom: none; }
+
+    .accordion-trigger {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 0.9rem 1.25rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s;
+    }
+    .accordion-trigger:hover { background: #F8FAFC; }
+    .accordion-trigger.open  { background: #EFF6FF; }
+
+    .acc-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .acc-info { flex: 1; min-width: 0; }
+    .acc-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .acc-meta {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
+    }
+    .acc-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-shrink: 0;
+    }
+    .acc-exam-count {
+      background: var(--sky);
+      color: var(--blue);
+      border-radius: 20px;
+      padding: 0.15rem 0.65rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+    }
+    .acc-chevron {
+      color: var(--muted);
+      font-size: 0.85rem;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .accordion-trigger.open .acc-chevron { transform: rotate(180deg); }
+
+    .accordion-body {
+      display: none;
+      border-top: 1px solid var(--border);
+      background: #FAFCFF;
+      animation: slideDown 0.22s ease;
+    }
+    .accordion-body.open { display: block; }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .acc-inner-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .acc-inner-table th {
+      background: #F1F5F9;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .acc-inner-table td {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.83rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+      color: var(--text);
+    }
+    .acc-inner-table tr:last-child td { border-bottom: none; }
+    .acc-inner-table tr:hover td { background: #F0F7FF; }
+
+    .acc-no-exams {
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.83rem;
+    }
+    .acc-no-exams .emoji { font-size: 1.5rem; margin-bottom: 0.4rem; }
+
+    .acc-score-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .acc-score-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: #E2E8F0;
+      border-radius: 3px;
+      overflow: hidden;
+      min-width: 60px;
+    }
+    .acc-score-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+    .acc-score-text {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      min-width: 50px;
+    }
+
+    .acc-empty-all {
+      padding: 3rem 1rem;
+      text-align: center;
+      color: var(--muted);
+    }
+    .acc-empty-all .emoji { font-size: 3rem; margin-bottom: 0.75rem; }
+
+    /* ═══════════════════════════════════════════
+       SUBJECT MANAGEMENT STYLES
+    ═══════════════════════════════════════════ */
+    .subject-layout {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+    @media(max-width:860px){ .subject-layout { grid-template-columns: 1fr; } }
+
+    .subject-add-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+    .subject-add-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      margin-bottom: 1rem; color: var(--text);
+    }
+    .subject-input-row {
+      display: flex; gap: 0.6rem;
+    }
+    .subject-input-row input {
+      flex: 1;
+      padding: 0.55rem 0.9rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.18s;
+    }
+    .subject-input-row input:focus { border-color: var(--blue); }
+    .btn-add-subject {
+      padding: 0.55rem 1.1rem;
+      background: var(--blue);
+      color: #fff; border: none;
+      border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap;
+      transition: background 0.18s;
+    }
+    .btn-add-subject:hover { background: #1D4ED8; }
+
+    .subject-hint {
+      margin-top: 0.75rem;
+      font-size: 0.75rem; color: var(--muted);
+      line-height: 1.5;
+    }
+    .subject-stats {
+      display: flex; gap: 0.75rem; flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+    .subj-stat-pill {
+      background: var(--sky);
+      border-radius: 20px;
+      padding: 0.3rem 0.85rem;
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--blue);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .subject-list-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .subject-list-header {
+      display: flex; justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      background: #F8FAFC;
+      border-bottom: 1px solid var(--border);
+    }
+    .subject-list-header h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem; font-weight: 700;
+    }
+    .subj-search {
+      padding: 0.35rem 0.7rem;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-size: 0.8rem;
+      outline: none; width: 180px;
+      transition: border-color 0.18s;
+    }
+    .subj-search:focus { border-color: var(--blue); }
+
+    .subject-list { list-style: none; padding: 0; margin: 0; }
+    .subject-item {
+      display: flex; align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+    .subject-item:last-child { border-bottom: none; }
+    .subject-item:hover { background: #F8FAFC; }
+
+    .subj-color-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .subj-name {
+      flex: 1;
+      font-weight: 600; font-size: 0.9rem;
+      color: var(--text);
+    }
+    .subj-id-badge {
+      font-family: 'Outfit', monospace;
+      font-size: 0.68rem; color: var(--muted);
+      background: #F1F5F9;
+      border-radius: 4px;
+      padding: 0.1rem 0.45rem;
+    }
+    .subj-q-count {
+      font-size: 0.75rem; color: var(--muted);
+      white-space: nowrap;
+    }
+    .btn-del-subject {
+      background: none; border: none;
+      color: var(--danger); cursor: pointer;
+      font-size: 1rem; padding: 0.2rem 0.4rem;
+      border-radius: 5px; transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-del-subject:hover { background: #FEE2E2; }
+    .subj-empty {
+      padding: 2.5rem; text-align: center;
+      color: var(--muted); font-size: 0.85rem;
+    }
+
+    /* colour dots palette (cycles through 8 colours) */
+    .dot-c0{background:#3B82F6} .dot-c1{background:#10B981} .dot-c2{background:#F59E0B}
+    .dot-c3{background:#EF4444} .dot-c4{background:#8B5CF6} .dot-c5{background:#EC4899}
+    .dot-c6{background:#06B6D4} .dot-c7{background:#84CC16}
+
+    /* Subject badge in question modal */
+    .qf-subject-row {
+      display: flex; gap: 0.6rem; align-items: center;
+    }
+    .qf-subject-row select { flex: 1; }
+    .btn-new-subj-inline {
+      padding: 0.42rem 0.7rem;
+      background: var(--sky); color: var(--blue);
+      border: 1.5px solid #BFDBFE;
+      border-radius: 7px; font-size: 0.78rem;
+      font-weight: 700; cursor: pointer;
+      white-space: nowrap; transition: background 0.15s;
+    }
+    .btn-new-subj-inline:hover { background: #DBEAFE; }
+
+    /* ── QUESTION IMAGE UPLOAD ── */
+    .img-upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 1.1rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+      background: #FAFCFF;
+      position: relative;
+    }
+    .img-upload-zone:hover,
+    .img-upload-zone.drag-over {
+      border-color: var(--blue);
+      background: #EFF6FF;
+    }
+    .img-upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0;
+      cursor: pointer; width: 100%; height: 100%;
+    }
+    .img-upload-icon { font-size: 1.8rem; margin-bottom: 0.3rem; }
+    .img-upload-label {
+      font-size: 0.83rem; color: var(--muted); line-height: 1.5;
+    }
+    .img-upload-label strong { color: var(--blue); }
+
+    /* Preview area — shown after image selected */
+    .img-preview-wrap {
+      display: none;
+      margin-top: 0.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #F8FAFC;
+      position: relative;
+    }
+    .img-preview-wrap.visible { display: block; }
+    .img-preview-wrap img {
+      display: block; max-width: 100%;
+      max-height: 220px; margin: 0 auto;
+      object-fit: contain; padding: 0.5rem;
+    }
+    .img-preview-bar {
+      display: flex; align-items: center;
+      gap: 0.6rem; padding: 0.5rem 0.85rem;
+      background: #F1F5F9;
+      border-top: 1px solid var(--border);
+      font-size: 0.75rem; color: var(--muted);
+    }
+    .img-preview-bar .img-name { flex: 1; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .btn-remove-img {
+      background: none; border: none; color: var(--danger);
+      cursor: pointer; font-size: 0.75rem; font-weight: 700;
+      padding: 0.15rem 0.4rem; border-radius: 4px;
+      transition: background 0.15s; white-space: nowrap;
+    }
+    .btn-remove-img:hover { background: #FEE2E2; }
+    .img-error-msg {
+      display: none; color: var(--danger);
+      font-size: 0.75rem; margin-top: 0.4rem; font-weight: 600;
+    }
+    .img-error-msg.show { display: block; }
+
+    /* Thumbnail in questions table */
+    .q-img-thumb {
+      width: 40px; height: 40px;
+      object-fit: cover; border-radius: 6px;
+      border: 1.5px solid var(--border);
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+      vertical-align: middle;
+    }
+    .q-img-thumb:hover { transform: scale(1.08); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .no-img-badge {
+      font-size: 0.68rem; color: var(--muted);
+      background: #F1F5F9; border-radius: 4px;
+      padding: 0.15rem 0.45rem;
+    }
+
+    /* Full-size image lightbox (admin table) */
+    #img-lightbox {
+      display: none; position: fixed; inset: 0; z-index: 10000;
+      background: rgba(0,0,0,0.85);
+      align-items: center; justify-content: center;
+      cursor: zoom-out; animation: lbIn 0.18s ease;
+    }
+    #img-lightbox.open { display: flex; }
+    @keyframes lbIn { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
+    #img-lightbox img {
+      max-width: 90vw; max-height: 88vh;
+      border-radius: 10px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      object-fit: contain;
+    }
+    #img-lightbox .lb-close {
+      position: absolute; top: 1.2rem; right: 1.5rem;
+      background: rgba(255,255,255,0.15); border: none;
+      color: #fff; font-size: 1.4rem; cursor: pointer;
+      border-radius: 50%; width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    #img-lightbox .lb-close:hover { background: rgba(255,255,255,0.3); }
+
+    /* Subject column badge in questions table */
+    .subj-tag {
+      display: inline-block;
+      background: #EFF6FF; color: #1D4ED8;
+      border-radius: 5px; padding: 0.15rem 0.5rem;
+      font-size: 0.72rem; font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Filter bar in questions section */
+    .q-filter-bar {
+      display: flex; gap: 0.75rem; align-items: center;
+      margin-bottom: 1rem; flex-wrap: wrap;
+    }
+    .q-filter-bar select { flex: 1; max-width: 260px; }
+    .q-filter-bar .btn-primary { white-space: nowrap; }
+
+    /* ═══════════════════════════════════════════
+       EXPORT MODAL & BUTTON STYLES
+    ═══════════════════════════════════════════ */
+    .btn-export {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.55rem 1.1rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(5,150,105,0.28);
+      transition: all 0.18s ease;
+      letter-spacing: 0.02em;
+    }
+    .btn-export:hover  { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(5,150,105,0.38); }
+    .btn-export:active { transform: translateY(0);    box-shadow: 0 1px 4px rgba(5,150,105,0.22); }
+    .btn-export.loading { opacity: 0.7; pointer-events: none; }
+
+    /* Export Modal overlay */
+    #export-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(3px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    #export-modal.open { opacity: 1; pointer-events: all; }
+
+    .export-modal-box {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+      width: min(560px, 94vw);
+      overflow: hidden;
+      transform: translateY(16px);
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    #export-modal.open .export-modal-box { transform: translateY(0); }
+
+    .export-modal-head {
+      background: linear-gradient(135deg, #064E3B 0%, #065F46 100%);
+      padding: 1.35rem 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .export-modal-head .em-icon { font-size: 1.6rem; }
+    .export-modal-head h2 {
+      font-family: 'Outfit', sans-serif; font-size: 1.05rem;
+      font-weight: 800; color: #fff; flex: 1;
+    }
+    .export-modal-head p { font-size: 0.75rem; color: #A7F3D0; margin-top: 0.15rem; }
+    .em-close {
+      background: rgba(255,255,255,0.15); border: none; color: #fff;
+      width: 28px; height: 28px; border-radius: 50%;
+      font-size: 1rem; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .em-close:hover { background: rgba(255,255,255,0.28); }
+
+    .export-modal-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.1rem; }
+
+    .em-field label {
+      display: block; font-size: 0.75rem; font-weight: 700;
+      color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+    .em-field select, .em-field input[type="date"] {
+      width: 100%; padding: 0.55rem 0.8rem;
+      border: 1.5px solid var(--border); border-radius: 9px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+      background: #F8FAFC; color: var(--text);
+      outline: none; transition: border-color 0.18s;
+    }
+    .em-field select:focus,
+    .em-field input[type="date"]:focus { border-color: #059669; }
+
+    .em-date-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    .em-toggle-row {
+      display: flex; align-items: center; gap: 0.75rem;
+      background: #F0FDF4; border-radius: 10px; padding: 0.75rem 1rem;
+    }
+    .em-toggle-row label { font-size: 0.85rem; color: #065F46; font-weight: 600; flex: 1; cursor: pointer; }
+    .em-toggle-row small { font-size: 0.72rem; color: var(--muted); display: block; font-weight: 400; }
+
+    /* toggle switch */
+    .toggle-sw { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+    .toggle-sw input { opacity: 0; width: 0; height: 0; }
+    .toggle-sw .slider {
+      position: absolute; inset: 0; background: #CBD5E1;
+      border-radius: 24px; cursor: pointer; transition: 0.25s;
+    }
+    .toggle-sw .slider::before {
+      content: ""; position: absolute; width: 18px; height: 18px;
+      background: #fff; border-radius: 50%;
+      bottom: 3px; left: 3px; transition: 0.25s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .toggle-sw input:checked + .slider { background: #059669; }
+    .toggle-sw input:checked + .slider::before { transform: translateX(18px); }
+
+    .em-preview {
+      background: #F8FAFC; border: 1px solid var(--border);
+      border-radius: 10px; padding: 0.85rem 1rem;
+      font-size: 0.78rem; color: var(--muted);
+    }
+    .em-preview strong { color: var(--text); }
+    #em-preview-text { margin-top: 0.3rem; line-height: 1.6; }
+
+    .em-footer {
+      display: flex; gap: 0.75rem; justify-content: flex-end;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      background: #FAFAFA;
+    }
+    .em-btn-cancel {
+      padding: 0.55rem 1.2rem; border: 1.5px solid var(--border);
+      border-radius: 9px; background: #fff; color: var(--text);
+      font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.85rem;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .em-btn-cancel:hover { background: #F1F5F9; }
+    .em-btn-download {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.55rem 1.4rem;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: #fff; border: none; border-radius: 9px;
+      font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.85rem;
+      cursor: pointer; box-shadow: 0 2px 8px rgba(5,150,105,0.28);
+      transition: all 0.18s;
+    }
+    .em-btn-download:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(5,150,105,0.38); }
+    .em-btn-download.loading { opacity: 0.7; pointer-events: none; }
+
+    /* toast notification */
+    #export-toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: #064E3B; color: #fff;
+      padding: 0.75rem 1.2rem; border-radius: 12px;
+      font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 600;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.22);
+      display: flex; align-items: center; gap: 0.5rem;
+      transform: translateY(80px); opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+      z-index: 10000;
+      pointer-events: none;
+    }
+    #export-toast.show { transform: translateY(0); opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sb-brand">📋 Exam<span>Portal</span></div>
+  <div class="sb-role">
+    <p>Logged in as</p>
+    <strong id="admin-name">Admin</strong>
+  </div>
+  <nav class="sb-nav">
+    <button class="sb-link active" onclick="showSection('overview')"  id="nav-overview">
+      <span class="icon">🏠</span> Overview
+    </button>
+    <button class="sb-link" onclick="showSection('evaluate')" id="nav-evaluate">
+      <span class="icon">📝</span> Evaluate Answers
+      <span class="badge-count" id="pending-badge-count" style="display:none">0</span>
+    </button>
+    <button class="sb-link" onclick="showSection('exams')"    id="nav-exams">
+      <span class="icon">📚</span> Manage Exams
+    </button>
+    <button class="sb-link" onclick="showSection('questions')" id="nav-questions">
+      <span class="icon">❓</span> Questions
+    </button>
+    <button class="sb-link" onclick="showSection('subjects')" id="nav-subjects">
+      <span class="icon">📂</span> Subjects
+    </button>
+    <button class="sb-link" onclick="showSection('results')"  id="nav-results">
+      <span class="icon">📊</span> Results
+    </button>
+    <button class="sb-link" onclick="showSection('students')" id="nav-students">
+      <span class="icon">👥</span> Students
+    </button>
+  </nav>
+  <div class="sb-bottom">
+    <button class="sb-logout" onclick="logout()">🚪 Logout</button>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="admin-main">
+
+  <!-- OVERVIEW -->
+  <section class="page-section active" id="section-overview">
+    <div class="page-title">Dashboard Overview</div>
+    <div class="page-sub">Welcome back, Admin. Here's a snapshot of your exam portal.</div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue">📚</div>
+        <div><div class="stat-val" id="ov-exams">0</div><div class="stat-lbl">Total Exams</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">👥</div>
+        <div><div class="stat-val" id="ov-students">0</div><div class="stat-lbl">Students</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple">📋</div>
+        <div><div class="stat-val" id="ov-results">0</div><div class="stat-lbl">Submissions</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange">✅</div>
+        <div><div class="stat-val" id="ov-pass">0%</div><div class="stat-lbl">Pass Rate</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red">⏳</div>
+        <div><div class="stat-val" id="ov-pending">0</div><div class="stat-lbl">Pending Evals</div></div>
+      </div>
+    </div>
+    <!-- Students with Exam History Accordion -->
+    <div class="accordion-wrap" id="students-accordion-wrap">
+      <div class="accordion-header-bar">
+        <h3>👥 All Students &amp; Exam History</h3>
+        <div style="display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap;">
+          <input class="accordion-search" id="accordion-search-input"
+                 type="text" placeholder="🔍 Search student…"
+                 oninput="filterAccordion(this.value)" />
+          <button class="btn-export" onclick="openExportModal()">
+            📥 Export Students Data
+          </button>
+        </div>
+      </div>
+      <div id="students-accordion-list">
+        <div class="acc-empty-all">
+          <div class="emoji">⏳</div>
+          <div>Loading students…</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════ -->
+  <!-- EVALUATE SHORT ANSWERS  ← NEW SECTION                 -->
+  <!-- ══════════════════════════════════════════════════════ -->
+  <section class="page-section" id="section-evaluate">
+    <div class="page-title">📝 Evaluate Short Answers</div>
+    <div class="page-sub">Review and assign marks to descriptive student responses.</div>
+
+    <div class="filter-row">
+      <select id="eval-exam-filter" onchange="renderEvalCards()">
+        <option value="">All Exams</option>
+      </select>
+      <select id="eval-status-filter" onchange="renderEvalCards()">
+        <option value="pending">Pending Only</option>
+        <option value="all">All Submissions</option>
+        <option value="evaluated">Evaluated Only</option>
+      </select>
+      <button class="btn btn-primary btn-sm" onclick="renderEvalCards()">🔄 Refresh</button>
+    </div>
+
+    <div id="eval-cards-container">
+      <div class="empty-state"><div class="emoji">📭</div>No pending evaluations.</div>
+    </div>
+  </section>
+
+  <!-- EXAMS -->
+  <section class="page-section" id="section-exams">
+    <div class="page-title">Manage Exams</div>
+    <div class="page-sub">Create, edit or delete exams.</div>
+    <div style="margin-bottom:1rem">
+      <button class="btn btn-primary" onclick="openExamForm()">+ Create Exam</button>
+    </div>
+    <div class="table-card">
+      <table>
+        <thead><tr><th>Title</th><th>Subject</th><th>Questions</th><th>Duration</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="exams-table"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- QUESTIONS -->
+  <section class="page-section" id="section-questions">
+    <div class="page-title">Manage Questions</div>
+    <div class="page-sub">Add or edit questions for any exam. Use the filters to narrow by exam or subject.</div>
+    <div class="q-filter-bar">
+      <select id="q-exam-select" onchange="renderQuestionsTable()">
+        <option value="">📚 Select an exam…</option>
+      </select>
+      <select id="q-subject-filter" onchange="renderQuestionsTable()">
+        <option value="">📂 All Subjects</option>
+      </select>
+      <button class="btn btn-primary" onclick="openQForm()">+ Add Question</button>
+    </div>
+    <div class="table-card">
+      <table>
+        <thead><tr><th>#</th><th>Type</th><th>Subject</th><th>Image</th><th>Question</th><th>Answer / Info</th><th>Marks</th><th>Actions</th></tr></thead>
+        <tbody id="questions-table"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SUBJECTS -->
+  <section class="page-section" id="section-subjects">
+    <div class="page-title">Subject Management</div>
+    <div class="page-sub">Create and manage subjects. Questions are linked to subjects for organised filtering.</div>
+
+    <div class="subject-layout">
+      <!-- Add Subject Card -->
+      <div class="subject-add-card">
+        <h3>➕ Add New Subject</h3>
+        <div class="subject-input-row">
+          <input type="text" id="new-subject-input"
+                 placeholder="e.g. Biology, Economics…"
+                 onkeydown="if(event.key==='Enter') addSubject()" />
+          <button class="btn-add-subject" onclick="addSubject()">Add</button>
+        </div>
+        <div class="subject-hint">
+          Subject names must be unique. Once added, they appear in the question form dropdown and can be used to filter questions.
+        </div>
+        <div class="subject-stats" id="subj-stats-pills"></div>
+      </div>
+
+      <!-- Subject List Card -->
+      <div class="subject-list-card">
+        <div class="subject-list-header">
+          <h3>📂 All Subjects (<span id="subj-total-count">0</span>)</h3>
+          <input class="subj-search" id="subj-search-input" type="text"
+                 placeholder="🔍 Search…" oninput="filterSubjectList(this.value)" />
+        </div>
+        <ul class="subject-list" id="subject-list-ul">
+          <li class="subj-empty">Loading…</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="page-section" id="section-results">
+    <div class="page-title">Student Results</div>
+    <div class="page-sub">All exam submissions. Final score includes manually evaluated short answers.</div>
+    <div class="table-card">
+      <table>
+        <thead><tr><th>Student</th><th>Exam</th><th>Auto Score</th><th>Final Score</th><th>Pass?</th><th>Short Eval</th><th>Reason</th><th>Date</th></tr></thead>
+        <tbody id="all-results-table"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- STUDENTS -->
+  <section class="page-section" id="section-students">
+    <div class="page-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;">
+      <div>
+        <div class="page-title" style="margin:0;padding:0">Registered Students</div>
+        <div class="page-sub" style="margin-top:0.2rem">All student accounts.</div>
+      </div>
+      <button class="btn-export" onclick="openExportModal()">
+        📥 Export Students Data
+      </button>
+    </div>
+    <div class="table-card">
+      <table>
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Registered</th><th>Actions</th></tr></thead>
+        <tbody id="students-table"></tbody>
+      </table>
+    </div>
+  </section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     EXPORT STUDENTS DATA MODAL
+═══════════════════════════════════════════════════════════════ -->
+<div id="export-modal">
+  <div class="export-modal-box">
+    <!-- Header -->
+    <div class="export-modal-head">
+      <span class="em-icon">📊</span>
+      <div style="flex:1">
+        <h2>Export Students Data</h2>
+        <p>Download all exam records as a formatted Excel file</p>
+      </div>
+      <button class="em-close" onclick="closeExportModal()">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="export-modal-body">
+      <!-- Student filter -->
+      <div class="em-field">
+        <label>Filter by Student</label>
+        <select id="em-student-filter" onchange="updateExportPreview()">
+          <option value="all">All Students</option>
+        </select>
+      </div>
+
+      <!-- Date range -->
+      <div class="em-field">
+        <label>Filter by Date Range (Attempt Date)</label>
+        <div class="em-date-row">
+          <div>
+            <input type="date" id="em-date-from" placeholder="From"
+                   onchange="updateExportPreview()" />
+          </div>
+          <div>
+            <input type="date" id="em-date-to" placeholder="To"
+                   onchange="updateExportPreview()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Per-student sheets toggle -->
+      <div class="em-toggle-row">
+        <label for="em-sheets-toggle">
+          Create separate sheet per student
+          <small>Each student gets their own tab in the Excel file</small>
+        </label>
+        <label class="toggle-sw">
+          <input type="checkbox" id="em-sheets-toggle" checked onchange="updateExportPreview()" />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Live preview -->
+      <div class="em-preview">
+        <strong>📋 Export Preview</strong>
+        <div id="em-preview-text">Loading…</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="em-footer">
+      <button class="em-btn-cancel" onclick="closeExportModal()">Cancel</button>
+      <button class="em-btn-download" id="em-download-btn" onclick="runExport()">
+        ⬇ Download Excel
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="export-toast">✅ <span id="export-toast-msg">Download started!</span></div>
+
+</main>
+
+<!-- ── EXAM FORM MODAL ── -->
+<div class="overlay" id="exam-modal">
+  <div class="form-modal">
+    <div class="form-title">
+      <span id="exam-form-title">Create Exam</span>
+      <button class="close-btn" onclick="closeModal('exam-modal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Exam Title</label>
+      <input type="text" id="ef-title" placeholder="e.g. General Knowledge Test" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" id="ef-subject" placeholder="e.g. Science" />
+      </div>
+      <div class="form-group">
+        <label>Duration (minutes)</label>
+        <input type="number" id="ef-duration" min="1" max="180" value="30" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Total Marks</label>
+        <input type="number" id="ef-totalmarks" value="60" />
+      </div>
+      <div class="form-group">
+        <label>Passing Marks</label>
+        <input type="number" id="ef-passing" value="24" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>+Marks per Correct (MCQ/Fill)</label>
+        <input type="number" id="ef-correct" value="4" />
+      </div>
+      <div class="form-group">
+        <label>−Negative Marks (MCQ only)</label>
+        <input type="number" id="ef-negative" value="1" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea id="ef-desc" placeholder="Brief description of the exam…"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Status</label>
+      <select id="ef-status">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+    <input type="hidden" id="ef-id" />
+    <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem">
+      <button class="btn" onclick="closeModal('exam-modal')" style="background:#F1F5F9;color:var(--text)">Cancel</button>
+      <button class="btn btn-primary" onclick="saveExamForm()">Save Exam</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── QUESTION FORM MODAL ── -->
+<div class="overlay" id="q-modal">
+  <div class="form-modal">
+    <div class="form-title">
+      <span id="q-form-title">Add Question</span>
+      <button class="close-btn" onclick="closeModal('q-modal')">✕</button>
+    </div>
+
+    <!-- Question type tabs -->
+    <div class="form-group">
+      <label>Question Type</label>
+      <div class="qtype-tabs">
+        <button class="qtype-tab active" id="tab-MCQ"   onclick="switchQType('MCQ')">🔘 MCQ</button>
+        <button class="qtype-tab"        id="tab-FILL"  onclick="switchQType('FILL')">✏️ Fill in the Blank</button>
+        <button class="qtype-tab"        id="tab-SHORT" onclick="switchQType('SHORT')">📝 Short Answer</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Subject <span style="color:var(--danger)">*</span></label>
+      <div class="qf-subject-row">
+        <select id="qf-subject-id">
+          <option value="">— Select a subject —</option>
+        </select>
+        <button class="btn-new-subj-inline" type="button"
+                onclick="closeModal('q-modal'); showSection('subjects'); document.getElementById('new-subject-input').focus()">
+          + New Subject
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Question Text</label>
+      <textarea id="qf-text" placeholder="Enter the question…" style="min-height:80px"></textarea>
+    </div>
+
+    <!-- MCQ options -->
+    <div class="qtype-section visible" id="qsec-MCQ">
+      <div class="form-group">
+        <label>Options (select the correct answer)</label>
+        <div id="qf-options"></div>
+      </div>
+    </div>
+
+    <!-- Fill in the blank -->
+    <div class="qtype-section" id="qsec-FILL">
+      <div class="form-group">
+        <label>Correct Answer <small style="font-weight:400;text-transform:none;font-size:0.75rem">(case-insensitive match)</small></label>
+        <input type="text" id="qf-fill-answer" placeholder="e.g. Paris" />
+      </div>
+      <div class="form-group">
+        <label>Marks for this Question</label>
+        <input type="number" id="qf-fill-marks" value="4" min="1" />
+      </div>
+    </div>
+
+    <!-- Short answer -->
+    <div class="qtype-section" id="qsec-SHORT">
+      <div class="form-group">
+        <label>Marks for this Question <small style="font-weight:400;text-transform:none">(awarded manually)</small></label>
+        <input type="number" id="qf-short-marks" value="5" min="1" />
+      </div>
+      <div style="padding:0.75rem 1rem;background:#FFF7ED;border-radius:8px;border-left:3px solid var(--orange);font-size:0.82rem;color:#9A3412;margin-bottom:1rem">
+        ℹ️ Short answer questions are displayed as a large text area. Marks are assigned manually by you after submission.
+      </div>
+    </div>
+
+    <input type="hidden" id="qf-id" />
+    <input type="hidden" id="qf-exam-id" />
+    <input type="hidden" id="qf-type" value="MCQ" />
+    <input type="hidden" id="qf-image-data" />   <!-- stores base64 string -->
+
+    <!-- ── IMAGE UPLOAD (optional) ── -->
+    <div class="form-group">
+      <label>Question Image <small style="font-weight:400;text-transform:none;font-size:0.75rem">(optional — JPG, PNG, GIF, WebP · max 2 MB)</small></label>
+
+      <div class="img-upload-zone" id="img-drop-zone"
+           ondragover="handleImgDragOver(event)"
+           ondragleave="handleImgDragLeave(event)"
+           ondrop="handleImgDrop(event)">
+        <input type="file" id="qf-image-file" accept="image/jpeg,image/png,image/gif,image/webp"
+               onchange="handleImgSelect(this.files[0])" />
+        <div class="img-upload-icon">🖼️</div>
+        <div class="img-upload-label">
+          <strong>Click to upload</strong> or drag & drop an image here<br/>
+          <span style="font-size:0.72rem">JPG · PNG · GIF · WebP · max 2 MB</span>
+        </div>
+      </div>
+
+      <div class="img-error-msg" id="img-error-msg">⚠ Invalid file. Please use JPG/PNG/GIF/WebP under 2 MB.</div>
+
+      <!-- Preview shown after successful selection -->
+      <div class="img-preview-wrap" id="img-preview-wrap">
+        <img id="img-preview-el" src="" alt="Question image preview" />
+        <div class="img-preview-bar">
+          <span class="img-name" id="img-file-name">image.jpg</span>
+          <span id="img-file-size" style="flex-shrink:0"></span>
+          <button class="btn-remove-img" type="button" onclick="removeQImage()">✕ Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem">
+      <button class="btn" onclick="closeModal('q-modal')" style="background:#F1F5F9;color:var(--text)">Cancel</button>
+      <button class="btn btn-primary" onclick="saveQForm()">Save Question</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MANUAL EVALUATION MODAL ── -->
+<div class="overlay" id="eval-modal">
+  <div class="form-modal eval-modal">
+    <div class="form-title">
+      <span>📝 Evaluate Short Answer</span>
+      <button class="close-btn" onclick="closeModal('eval-modal')">✕</button>
+    </div>
+
+    <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap">
+      <span style="font-size:0.8rem;color:var(--muted)">Student:</span>
+      <strong id="em-student" style="font-size:0.88rem"></strong>
+      <span style="font-size:0.8rem;color:var(--muted);margin-left:0.5rem">Exam:</span>
+      <strong id="em-exam" style="font-size:0.88rem"></strong>
+      <span id="em-status" class="eval-status-pill pending" style="margin-left:auto">⏳ Pending</span>
+    </div>
+
+    <div class="form-group">
+      <label>Question</label>
+      <div class="eval-question-text" id="em-question">…</div>
+    </div>
+
+    <div class="form-group">
+      <label>Student's Answer</label>
+      <div class="eval-student-answer" id="em-answer">…</div>
+    </div>
+
+    <div class="form-group">
+      <label>Assign Marks  <span id="em-max-marks-label" style="font-weight:400;text-transform:none">(max 0)</span></label>
+      <div class="marks-slider-wrap">
+        <input type="range" class="marks-slider" id="em-marks-slider" min="0" max="10" step="0.5" value="0" oninput="updateMarksDisplay()" />
+        <div class="marks-display" id="em-marks-display">0</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-top:0.25rem">
+        <span>0 (No credit)</span><span id="em-slider-max">Full marks</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Feedback / Comments <small style="font-weight:400;text-transform:none">(optional, shown to student)</small></label>
+      <textarea id="em-feedback" placeholder="e.g. Good explanation, but missed the second point…" style="min-height:80px"></textarea>
+    </div>
+
+    <input type="hidden" id="em-result-id" />
+    <input type="hidden" id="em-question-id" />
+    <input type="hidden" id="em-max-marks" value="5" />
+
+    <div style="display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem">
+      <button class="btn" onclick="closeModal('eval-modal')" style="background:#F1F5F9;color:var(--text)">Cancel</button>
+      <button class="btn btn-success" onclick="submitEvaluation()">✓ Save Evaluation</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  // ── Auth guard – admin only ──
+  const admin = requireAuth("admin");
+  document.getElementById("admin-name").textContent = admin ? admin.name : "";
+
+  // ════════════════════════════════════════════════════
+  //  SECTION NAVIGATION
+  // ════════════════════════════════════════════════════
+  function showSection(name) {
+    document.querySelectorAll(".page-section").forEach(s => s.classList.remove("active"));
+    document.querySelectorAll(".sb-link").forEach(b => b.classList.remove("active"));
+    document.getElementById("section-" + name).classList.add("active");
+    document.getElementById("nav-" + name).classList.add("active");
+    if (name === "overview")  renderOverview();
+    if (name === "evaluate")  { renderEvalExamFilter(); renderEvalCards(); }
+    if (name === "exams")     renderExamsTable();
+    if (name === "questions") renderQExamSelect();
+    if (name === "subjects")  renderSubjectsSection();
+    if (name === "results")   renderAllResults();
+    if (name === "students")  renderStudentsTable();
+  }
+
+  // ════════════════════════════════════════════════════
+  //  HELPERS
+  // ════════════════════════════════════════════════════
+  function getUsers() { return JSON.parse(localStorage.getItem("ep_users") || "[]"); }
+
+  function countPendingEvals() {
+    const results = getAllResults();
+    let count = 0;
+    results.forEach(r => {
+      const exam = getExam(r.examId);
+      if (!exam) return;
+      const shortQs = exam.questions.filter(q => (q.type || "MCQ") === "SHORT");
+      shortQs.forEach(q => {
+        const ans = r.answers ? r.answers[q.id] : null;
+        if (!ans || !ans.trim()) return;
+        const detail = r.shortAnswerDetails && r.shortAnswerDetails[q.id];
+        if (!detail || detail.status !== "evaluated") count++;
+      });
+    });
+    return count;
+  }
+
+  function updatePendingBadge() {
+    const n = countPendingEvals();
+    const badge = document.getElementById("pending-badge-count");
+    badge.textContent = n;
+    badge.style.display = n > 0 ? "inline-block" : "none";
+  }
+
+  // ════════════════════════════════════════════════════
+  //  OVERVIEW
+  // ════════════════════════════════════════════════════
+  //  OVERVIEW
+  // ════════════════════════════════════════════════════
+  function renderOverview() {
+    const exams   = getExams();
+    const results = getAllResults();
+    const users   = getUsers().filter(u => u.role === "student");
+    const passed  = results.filter(r => r.passed).length;
+    const pct     = results.length ? Math.round((passed / results.length) * 100) : 0;
+    const pending = countPendingEvals();
+
+    document.getElementById("ov-exams").textContent    = exams.length;
+    document.getElementById("ov-students").textContent = users.length;
+    document.getElementById("ov-results").textContent  = results.length;
+    document.getElementById("ov-pass").textContent     = pct + "%";
+    document.getElementById("ov-pending").textContent  = pending;
+    updatePendingBadge();
+
+    // Render students accordion instead of recent submissions
+    renderStudentsAccordion();
+  }
+
+  // ════════════════════════════════════════════════════
+  //  STUDENTS WITH EXAMS ACCORDION
+  // ════════════════════════════════════════════════════
+
+  /** Build the full dataset: [{student, exams:[...sorted latest first]}] */
+  function buildStudentsWithExams() {
+    const allUsers   = getUsers().filter(u => u.role === "student");
+    const allResults = getAllResults();
+    const allExams   = getExams();
+
+    return allUsers.map(student => {
+      // Get all submissions by this student, newest first
+      const submissions = allResults
+        .filter(r => r.userId === student.id)
+        .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+
+      const exams = submissions.map(r => {
+        const exam       = allExams.find(e => e.id === r.examId);
+        const examName   = exam ? exam.title : "Unknown Exam";
+        const maxScore   = r.maxScore || (exam ? exam.totalMarks : 0);
+        const finalScore = r.finalScore !== undefined ? r.finalScore : r.score;
+        const pct        = maxScore > 0 ? Math.round((finalScore / maxScore) * 100) : 0;
+        return {
+          examName,
+          marks    : finalScore,
+          maxMarks : maxScore,
+          pct,
+          date     : r.submittedAt,
+          passed   : r.passed,
+          resultId : r.id
+        };
+      });
+
+      return { student, exams };
+    });
+  }
+
+  /** Initials helper (up to 2 chars) */
+  function initials(name) {
+    return name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+  }
+
+  /** Score bar colour based on percentage */
+  function scoreColour(pct) {
+    if (pct >= 75) return "var(--success)";
+    if (pct >= 40) return "var(--warning)";
+    return "var(--danger)";
+  }
+
+  /** Build HTML for one accordion item */
+  function buildAccordionItem(entry) {
+    const { student, exams } = entry;
+    const bodyId   = "acc-body-" + student.id;
+    const examWord = exams.length === 1 ? "exam" : "exams";
+
+    const examsHTML = exams.length === 0
+      ? `<div class="acc-no-exams">
+           <div class="emoji">📭</div>
+           <div>This student hasn't attempted any exams yet.</div>
+         </div>`
+      : `<table class="acc-inner-table">
+           <thead>
+             <tr>
+               <th>#</th>
+               <th>Exam Name</th>
+               <th>Marks Obtained</th>
+               <th>Score %</th>
+               <th>Status</th>
+               <th>Date of Attempt</th>
+             </tr>
+           </thead>
+           <tbody>
+             ${exams.map((ex, i) => {
+               const colour  = scoreColour(ex.pct);
+               const barFill = "background:" + colour + ";width:" + ex.pct + "%";
+               const statusBadge = ex.passed !== undefined
+                 ? "<span class=\"badge " + (ex.passed ? "badge-pass" : "badge-fail") + "\">" + (ex.passed ? "✓ PASS" : "✗ FAIL") + "</span>"
+                 : "<span class=\"badge badge-pending\">Pending</span>";
+               return "<tr>"
+                 + "<td style=\"color:var(--muted);font-weight:600\">" + (i + 1) + "</td>"
+                 + "<td><strong>" + ex.examName + "</strong></td>"
+                 + "<td><div class=\"acc-score-bar-wrap\">"
+                 +   "<div class=\"acc-score-bar-bg\"><div class=\"acc-score-bar-fill\" style=\"" + barFill + "\"></div></div>"
+                 +   "<span class=\"acc-score-text\" style=\"color:" + colour + "\">" + ex.marks + "/" + ex.maxMarks + "</span>"
+                 + "</div></td>"
+                 + "<td><span style=\"font-family:'Outfit',sans-serif;font-weight:700;color:" + colour + "\">" + ex.pct + "%</span></td>"
+                 + "<td>" + statusBadge + "</td>"
+                 + "<td style=\"color:var(--muted);font-size:0.78rem;white-space:nowrap\">" + fmtDate(ex.date) + "</td>"
+                 + "</tr>";
+             }).join("")}
+           </tbody>
+         </table>`;
+
+    return `
+      <div class="accordion-item" id="acc-item-${student.id}"
+           data-name="${student.name.toLowerCase()}" data-email="${student.email.toLowerCase()}">
+        <button class="accordion-trigger" onclick="toggleAccordion('${student.id}')" id="acc-btn-${student.id}">
+          <div class="acc-avatar">${initials(student.name)}</div>
+          <div class="acc-info">
+            <div class="acc-name">${student.name}</div>
+            <div class="acc-meta">${student.email} &nbsp;·&nbsp; Joined ${fmtDate(student.createdAt)}</div>
+          </div>
+          <div class="acc-right">
+            <span class="acc-exam-count">${exams.length} ${examWord}</span>
+            <span class="acc-chevron">▼</span>
+          </div>
+        </button>
+        <div class="accordion-body" id="${bodyId}">
+          ${examsHTML}
+        </div>
+      </div>`;
+  }
+
+  /** Render all students into the accordion container */
+  function renderStudentsAccordion() {
+    const data   = buildStudentsWithExams();
+    const listEl = document.getElementById("students-accordion-list");
+    if (!data.length) {
+      listEl.innerHTML = `
+        <div class="acc-empty-all">
+          <div class="emoji">👤</div>
+          <div style="font-weight:600;margin-bottom:0.3rem">No students registered yet.</div>
+          <div style="font-size:0.82rem">Students will appear here once they sign up.</div>
+        </div>`;
+      return;
+    }
+    listEl.innerHTML = data.map(entry => buildAccordionItem(entry)).join("");
+  }
+
+  /** Toggle a single accordion item open/closed */
+  function toggleAccordion(studentId) {
+    const btn  = document.getElementById("acc-btn-"  + studentId);
+    const body = document.getElementById("acc-body-" + studentId);
+    const isOpen = body.classList.contains("open");
+
+    // Close all
+    document.querySelectorAll(".accordion-body").forEach(b => b.classList.remove("open"));
+    document.querySelectorAll(".accordion-trigger").forEach(b => b.classList.remove("open"));
+
+    // If was closed, open this one
+    if (!isOpen) {
+      body.classList.add("open");
+      btn.classList.add("open");
+    }
+  }
+
+  /** Live search/filter accordion items by student name or email */
+  function filterAccordion(query) {
+    const q = query.toLowerCase().trim();
+    document.querySelectorAll(".accordion-item").forEach(item => {
+      const name  = item.dataset.name  || "";
+      const email = item.dataset.email || "";
+      item.style.display = (!q || name.includes(q) || email.includes(q)) ? "" : "none";
+    });
+  }
+
+  // ════════════════════════════════════════════════════
+  //  EVALUATE SHORT ANSWERS
+  // ════════════════════════════════════════════════════
+  function renderEvalExamFilter() {
+    const sel = document.getElementById("eval-exam-filter");
+    const cur = sel.value;
+    sel.innerHTML = `<option value="">All Exams</option>` +
+      getExams().map(e => `<option value="${e.id}" ${e.id === cur ? "selected" : ""}>${e.title}</option>`).join("");
+  }
+
+  function renderEvalCards() {
+    updatePendingBadge();
+    const examFilter   = document.getElementById("eval-exam-filter").value;
+    const statusFilter = document.getElementById("eval-status-filter").value;
+    const results = getAllResults().sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+    const users   = getUsers();
+    const container = document.getElementById("eval-cards-container");
+    container.innerHTML = "";
+
+    let cardCount = 0;
+
+    results.forEach(r => {
+      if (examFilter && r.examId !== examFilter) return;
+      const ex = getExam(r.examId);
+      if (!ex) return;
+      const shortQs = ex.questions.filter(q => (q.type || "MCQ") === "SHORT");
+      if (!shortQs.length) return;
+      const student = users.find(u => u.id === r.userId);
+
+      shortQs.forEach(q => {
+        const ans    = r.answers && r.answers[q.id];
+        const detail = (r.shortAnswerDetails || {})[q.id];
+        const isEval = detail && detail.status === "evaluated";
+        const hasAns = ans && ans.trim();
+
+        if (statusFilter === "pending"   && (isEval || !hasAns)) return;
+        if (statusFilter === "evaluated" && (!isEval || !hasAns)) return;
+
+        cardCount++;
+        const card = document.createElement("div");
+        card.className = "eval-card";
+
+        const preview = hasAns
+          ? ans.trim().slice(0, 200) + (ans.length > 200 ? "…" : "")
+          : "No answer provided.";
+
+        card.innerHTML = `
+          <div class="eval-card-header">
+            <div>
+              <div class="eval-student-name">👤 ${student ? student.name : r.userId}</div>
+              <div class="eval-exam-name">📚 ${ex.title} &nbsp;·&nbsp; ${fmtDate(r.submittedAt)}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.6rem;flex-shrink:0">
+              ${isEval
+                ? `<span class="eval-status-pill done">✓ ${detail.marks}/${detail.maxMarks || q.marks} marks</span>`
+                : `<span class="eval-status-pill pending">⏳ Pending</span>`}
+              <button class="btn ${isEval ? 'btn-edit' : 'btn-orange'} btn-sm"
+                onclick="openEvalModal('${r.id}','${q.id}')">
+                ${isEval ? "✏ Edit" : "📝 Evaluate"}
+              </button>
+            </div>
+          </div>
+          <div class="eval-card-body">
+            <div class="eval-q-text">Q: ${q.text}</div>
+            <div class="eval-answer-preview ${!hasAns ? 'empty' : ''}">${hasAns ? preview : "No answer provided"}</div>
+            ${isEval && detail.feedback
+              ? `<div style="font-size:0.78rem;color:var(--muted);font-style:italic">💬 ${detail.feedback}</div>`
+              : ""}
+          </div>`;
+        container.appendChild(card);
+      });
+    });
+
+    if (!cardCount) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div class="emoji">${statusFilter === "pending" ? "🎉" : "📭"}</div>
+          <div style="font-weight:600;margin-bottom:0.4rem">
+            ${statusFilter === "pending" ? "All caught up!" : "No entries found"}
+          </div>
+          <div style="font-size:0.85rem">
+            ${statusFilter === "pending"
+              ? "No short answers awaiting evaluation."
+              : "No short answers match the current filter."}
+          </div>
+        </div>`;
+    }
+  }
+
+  // ── Open the evaluation modal for a specific result + question ──
+  function openEvalModal(resultId, questionId) {
+    const results  = getAllResults();
+    const result   = results.find(r => r.id === resultId);
+    const exam     = getExam(result.examId);
+    const question = exam.questions.find(q => q.id === questionId);
+    const student  = getUsers().find(u => u.id === result.userId);
+    const detail   = (result.shortAnswerDetails || {})[questionId];
+    const maxMarks = question.marks || exam.marksPerCorrect;
+
+    document.getElementById("em-result-id").value   = resultId;
+    document.getElementById("em-question-id").value = questionId;
+    document.getElementById("em-max-marks").value   = maxMarks;
+    document.getElementById("em-student").textContent = student ? student.name : result.userId;
+    document.getElementById("em-exam").textContent    = exam.title;
+    document.getElementById("em-question").textContent = question.text;
+
+    const ans = result.answers && result.answers[questionId];
+    const ansEl = document.getElementById("em-answer");
+    if (ans && ans.trim()) {
+      ansEl.textContent = ans;
+      ansEl.className   = "eval-student-answer";
+    } else {
+      ansEl.textContent = "No answer provided.";
+      ansEl.className   = "eval-student-answer empty";
+    }
+
+    // Slider setup
+    const slider = document.getElementById("em-marks-slider");
+    slider.max   = maxMarks;
+    slider.value = detail ? detail.marks : 0;
+    document.getElementById("em-max-marks-label").textContent = `(max ${maxMarks})`;
+    document.getElementById("em-slider-max").textContent       = `${maxMarks} (Full marks)`;
+    document.getElementById("em-feedback").value               = detail ? (detail.feedback || "") : "";
+    updateMarksDisplay();
+
+    // Status pill
+    const pill = document.getElementById("em-status");
+    if (detail && detail.status === "evaluated") {
+      pill.className   = "eval-status-pill done";
+      pill.textContent = "✓ Evaluated";
+    } else {
+      pill.className   = "eval-status-pill pending";
+      pill.textContent = "⏳ Pending";
+    }
+
+    showOverlay("eval-modal");
+  }
+
+  function updateMarksDisplay() {
+    const val = document.getElementById("em-marks-slider").value;
+    const max = document.getElementById("em-max-marks").value;
+    document.getElementById("em-marks-display").textContent = val;
+    // Update slider gradient
+    const pct = (val / max) * 100;
+    document.getElementById("em-marks-slider").style.background =
+      `linear-gradient(to right, var(--success) 0%, var(--success) ${pct}%, #E2E8F0 ${pct}%, #E2E8F0 100%)`;
+  }
+
+  function submitEvaluation() {
+    const resultId   = document.getElementById("em-result-id").value;
+    const questionId = document.getElementById("em-question-id").value;
+    const marks      = parseFloat(document.getElementById("em-marks-slider").value);
+    const feedback   = document.getElementById("em-feedback").value.trim();
+
+    const ok = evaluateShortAnswer(resultId, questionId, marks, feedback);
+    if (ok) {
+      closeModal("eval-modal");
+      toast(`Evaluation saved! ${marks} marks awarded.`, "success");
+      renderEvalCards();
+      updatePendingBadge();
+    } else {
+      toast("Failed to save evaluation.", "error");
+    }
+  }
+
+  // ════════════════════════════════════════════════════
+  //  EXAMS TABLE
+  // ════════════════════════════════════════════════════
+  function renderExamsTable() {
+    const tbody = document.getElementById("exams-table");
+    tbody.innerHTML = getExams().map(e => {
+      const qTypes = {};
+      e.questions.forEach(q => { const t = q.type || "MCQ"; qTypes[t] = (qTypes[t] || 0) + 1; });
+      const typeTags = Object.entries(qTypes)
+        .map(([t, n]) => `<span class="badge badge-${t.toLowerCase()}">${n} ${t}</span>`)
+        .join(" ");
+      return `<tr>
+        <td><strong>${e.title}</strong></td>
+        <td>${e.subject}</td>
+        <td>${e.questions.length} &nbsp;${typeTags}</td>
+        <td>${e.duration} min</td>
+        <td><span class="badge badge-${e.status}">${e.status}</span></td>
+        <td style="display:flex;gap:0.5rem">
+          <button class="btn btn-edit btn-sm"   onclick="editExam('${e.id}')">✏ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="delExam('${e.id}')">🗑 Delete</button>
+        </td>
+      </tr>`;
+    }).join("") || `<tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">No exams yet.</td></tr>`;
+  }
+
+  function openExamForm(exam) {
+    document.getElementById("exam-form-title").textContent = exam ? "Edit Exam" : "Create Exam";
+    document.getElementById("ef-id").value         = exam ? exam.id : "";
+    document.getElementById("ef-title").value      = exam ? exam.title : "";
+    document.getElementById("ef-subject").value    = exam ? exam.subject : "";
+    document.getElementById("ef-duration").value   = exam ? exam.duration : 30;
+    document.getElementById("ef-totalmarks").value = exam ? exam.totalMarks : 60;
+    document.getElementById("ef-passing").value    = exam ? exam.passingMarks : 24;
+    document.getElementById("ef-correct").value    = exam ? exam.marksPerCorrect : 4;
+    document.getElementById("ef-negative").value   = exam ? exam.negativeMarks : 1;
+    document.getElementById("ef-desc").value       = exam ? exam.description : "";
+    document.getElementById("ef-status").value     = exam ? exam.status : "active";
+    showOverlay("exam-modal");
+  }
+
+  function editExam(id) { openExamForm(getExam(id)); }
+
+  function saveExamForm() {
+    const id    = document.getElementById("ef-id").value;
+    const title = document.getElementById("ef-title").value.trim();
+    if (!title) { toast("Title is required.", "error"); return; }
+    const existing = id ? getExam(id) : null;
+    const exam = {
+      id:              id || "exam_" + Date.now(),
+      title,
+      subject:         document.getElementById("ef-subject").value.trim(),
+      description:     document.getElementById("ef-desc").value.trim(),
+      duration:        +document.getElementById("ef-duration").value,
+      totalMarks:      +document.getElementById("ef-totalmarks").value,
+      passingMarks:    +document.getElementById("ef-passing").value,
+      marksPerCorrect: +document.getElementById("ef-correct").value,
+      negativeMarks:   +document.getElementById("ef-negative").value,
+      status:          document.getElementById("ef-status").value,
+      createdAt:       existing ? existing.createdAt : new Date().toISOString(),
+      questions:       existing ? existing.questions : []
+    };
+    saveExam(exam);
+    closeModal("exam-modal");
+    renderExamsTable();
+    toast(id ? "Exam updated!" : "Exam created!", "success");
+  }
+
+  function delExam(id) {
+    if (!confirm("Delete this exam and all its questions?")) return;
+    deleteExam(id);
+    renderExamsTable();
+    toast("Exam deleted.", "warning");
+  }
+
+  // ════════════════════════════════════════════════════
+  //  QUESTIONS  (supports MCQ, FILL, SHORT)
+  // ════════════════════════════════════════════════════
+  let activeQType = "MCQ";
+
+  function switchQType(type) {
+    activeQType = type;
+    document.getElementById("qf-type").value = type;
+    ["MCQ","FILL","SHORT"].forEach(t => {
+      document.getElementById("tab-"  + t).classList.toggle("active",  t === type);
+      document.getElementById("qsec-" + t).classList.toggle("visible", t === type);
+    });
+  }
+
+  function renderQExamSelect() {
+    const sel = document.getElementById("q-exam-select");
+    const cur = sel.value;
+    sel.innerHTML = `<option value="">📚 Select an exam…</option>` +
+      getExams().map(e => `<option value="${e.id}" ${e.id === cur ? "selected" : ""}>${e.title}</option>`).join("");
+
+    // Also populate subject filter dropdown
+    const subjSel = document.getElementById("q-subject-filter");
+    const curSubj = subjSel.value;
+    subjSel.innerHTML = `<option value="">📂 All Subjects</option>` +
+      getSubjects().map(s => `<option value="${s.id}" ${s.id === curSubj ? "selected" : ""}>${s.name}</option>`).join("");
+
+    renderQuestionsTable();
+  }
+
+  function renderQuestionsTable() {
+    const examId    = document.getElementById("q-exam-select").value;
+    const subjFilter = document.getElementById("q-subject-filter").value;
+    const tbody     = document.getElementById("questions-table");
+
+    if (!examId) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted)">Select an exam above to view questions.</td></tr>`;
+      return;
+    }
+
+    const exam     = getExam(examId);
+    const subjects = getSubjects();
+    const KEYS     = ["A","B","C","D"];
+
+    // Apply subject filter (JOIN: question.subject_id → subjects table)
+    const questions = (exam.questions || []).filter(q =>
+      !subjFilter || q.subject_id === subjFilter
+    );
+
+    tbody.innerHTML = questions.map((q, i) => {
+      const type = q.type || "MCQ";
+      let answerInfo = "";
+      if (type === "MCQ") {
+        answerInfo = `<strong>${KEYS[q.correct]}: ${q.options[q.correct]}</strong>`;
+      } else if (type === "FILL") {
+        answerInfo = `<span style="color:var(--success)">✓ ${q.correct_answer}</span>`;
+      } else {
+        answerInfo = `<span style="color:var(--orange)">Manual eval</span>`;
+      }
+      const marks = (type === "MCQ") ? exam.marksPerCorrect : (q.marks || exam.marksPerCorrect);
+
+      // JOIN: look up subject name from subjects "table"
+      const subj = subjects.find(s => s.id === q.subject_id);
+      const subjTag = subj
+        ? `<span class="subj-tag">${subj.name}</span>`
+        : `<span style="color:var(--muted);font-size:0.75rem">—</span>`;
+
+      // Image thumbnail cell
+      const imgCell = q.image
+        ? `<td><img class="q-img-thumb" src="${q.image}" alt="Q image"
+               title="Click to view full size"
+               onclick="openLightbox('${q.image.substring(0,30)}…')"
+               onload="this.onclick=()=>openLightbox(this.src)" /></td>`
+        : `<td><span class="no-img-badge">—</span></td>`;
+
+      return `<tr>
+        <td>${i + 1}</td>
+        <td><span class="badge badge-${type.toLowerCase()}">${type}</span></td>
+        <td>${subjTag}</td>
+        ${imgCell}
+        <td style="max-width:260px">${q.text}</td>
+        <td>${answerInfo}</td>
+        <td>${marks}</td>
+        <td style="display:flex;gap:0.5rem">
+          <button class="btn btn-edit btn-sm"   onclick="editQ('${examId}','${q.id}')">✏ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="delQ('${examId}','${q.id}')">🗑</button>
+        </td>
+      </tr>`;
+    }).join("") ||
+    `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted)">
+      ${subjFilter ? "No questions match this subject filter." : "No questions yet. Click '+ Add Question' to begin."}
+    </td></tr>`;
+  }
+
+  function buildOptionRows(opts, correctIdx) {
+    const KEYS = ["A","B","C","D"];
+    document.getElementById("qf-options").innerHTML = [0,1,2,3].map(i => `
+      <div class="option-row">
+        <input type="radio" name="correct-opt" value="${i}" class="correct-radio"
+               ${i === correctIdx ? "checked" : ""} title="Mark as correct"/>
+        <input type="text" id="qf-opt-${i}" placeholder="Option ${KEYS[i]}"
+               value="${opts ? (opts[i] || "") : ""}"/>
+      </div>`).join("");
+  }
+
+  function openQForm(examId, q) {
+    const selExamId = examId || document.getElementById("q-exam-select").value;
+    if (!selExamId) { toast("Select an exam first.", "error"); return; }
+    document.getElementById("q-form-title").textContent = q ? "Edit Question" : "Add Question";
+    document.getElementById("qf-id").value      = q ? q.id    : "";
+    document.getElementById("qf-exam-id").value = selExamId;
+    document.getElementById("qf-text").value    = q ? q.text  : "";
+
+    // Populate subject dropdown
+    const subjSel = document.getElementById("qf-subject-id");
+    subjSel.innerHTML = `<option value="">— Select a subject —</option>` +
+      getSubjects().map(s =>
+        `<option value="${s.id}" ${q && q.subject_id === s.id ? "selected" : ""}>${s.name}</option>`
+      ).join("");
+
+    // Load image (existing) or reset upload zone
+    resetImgUpload(q ? (q.image || "") : "");
+
+    const type = q ? (q.type || "MCQ") : "MCQ";
+    switchQType(type);
+
+    if (type === "MCQ") {
+      buildOptionRows(q ? q.options : null, q ? q.correct : 0);
+    } else if (type === "FILL") {
+      document.getElementById("qf-fill-answer").value = q ? (q.correct_answer || "") : "";
+      document.getElementById("qf-fill-marks").value  = q ? (q.marks || 4) : 4;
+    } else if (type === "SHORT") {
+      document.getElementById("qf-short-marks").value = q ? (q.marks || 5) : 5;
+    }
+
+    showOverlay("q-modal");
+  }
+
+  function editQ(examId, qId) {
+    const exam = getExam(examId);
+    const q    = exam.questions.find(q => q.id === qId);
+    openQForm(examId, q);
+  }
+
+  function saveQForm() {
+    const examId    = document.getElementById("qf-exam-id").value;
+    const qId       = document.getElementById("qf-id").value;
+    const text      = document.getElementById("qf-text").value.trim();
+    const type      = document.getElementById("qf-type").value || "MCQ";
+    const subjectId = document.getElementById("qf-subject-id").value;
+    const imageData = document.getElementById("qf-image-data").value || "";
+
+    // Validation
+    if (!text)      { toast("Question text is required.", "error"); return; }
+    if (!subjectId) { toast("Please select a subject for this question.", "error"); return; }
+
+    let newQ = { id: qId || "q_" + Date.now(), type, text, subject_id: subjectId };
+    if (imageData) newQ.image = imageData;   // store base64 as "image" column
+
+    if (type === "MCQ") {
+      const options = [0,1,2,3].map(i => document.getElementById("qf-opt-" + i).value.trim());
+      if (options.some(o => !o)) { toast("All 4 options are required for MCQ.", "error"); return; }
+      const correctRadio = document.querySelector("input[name='correct-opt']:checked");
+      newQ.options = options;
+      newQ.correct = correctRadio ? +correctRadio.value : 0;
+
+    } else if (type === "FILL") {
+      const ans = document.getElementById("qf-fill-answer").value.trim();
+      if (!ans) { toast("Correct answer is required for Fill in the Blank.", "error"); return; }
+      newQ.correct_answer = ans;
+      newQ.marks = +document.getElementById("qf-fill-marks").value || 4;
+
+    } else if (type === "SHORT") {
+      newQ.marks = +document.getElementById("qf-short-marks").value || 5;
+    }
+
+    const exam = getExam(examId);
+    if (qId) {
+      const idx = exam.questions.findIndex(q => q.id === qId);
+      if (idx >= 0) exam.questions[idx] = newQ;
+    } else {
+      exam.questions.push(newQ);
+    }
+    saveExam(exam);
+    closeModal("q-modal");
+    renderQuestionsTable();
+    toast(qId ? "Question updated!" : "Question added!", "success");
+  }
+
+  function delQ(examId, qId) {
+    if (!confirm("Delete this question?")) return;
+    const exam = getExam(examId);
+    exam.questions = exam.questions.filter(q => q.id !== qId);
+    saveExam(exam);
+    renderQuestionsTable();
+    toast("Question deleted.", "warning");
+  }
+
+  // ════════════════════════════════════════════════════
+  //  ALL RESULTS
+  // ════════════════════════════════════════════════════
+  function renderAllResults() {
+    const results = getAllResults().sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+    const users   = getUsers();
+    const reasonLabels = { manual:"Manual", timeout:"Timeout", tab_switch:"Tab Switch", window_blur:"Window Blur" };
+
+    document.getElementById("all-results-table").innerHTML = results.map(r => {
+      const ex  = getExam(r.examId);
+      const st  = users.find(u => u.id === r.userId);
+      const shortQs = ex ? ex.questions.filter(q => (q.type || "MCQ") === "SHORT") : [];
+      let shortStatus = "–";
+      if (shortQs.length) {
+        shortStatus = r.allShortEvaluated
+          ? `<span class="badge badge-evaluated">✓ Done</span>`
+          : `<span class="badge badge-pending">⏳ Pending</span>
+             <button class="btn btn-orange btn-sm" style="margin-left:0.4rem"
+               onclick="showSection('evaluate')">Evaluate</button>`;
+      }
+      const finalScore = r.finalScore || r.score;
+      return `<tr>
+        <td>${st ? st.name : r.userId}</td>
+        <td>${ex ? ex.title : r.examId}</td>
+        <td><strong>${r.score}/${r.maxScore}</strong></td>
+        <td><strong style="color:var(--blue)">${finalScore}/${r.maxScore}</strong></td>
+        <td><span class="badge ${r.passed ? 'badge-pass' : 'badge-fail'}">${r.passed ? "PASS" : "FAIL"}</span></td>
+        <td>${shortStatus}</td>
+        <td style="color:var(--muted);font-size:0.78rem">${reasonLabels[r.reason] || r.reason}</td>
+        <td style="color:var(--muted);font-size:0.78rem">${fmtDate(r.submittedAt)}</td>
+      </tr>`;
+    }).join("") || `<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted)">No results yet.</td></tr>`;
+  }
+
+  // ════════════════════════════════════════════════════
+  //  STUDENTS TABLE
+  // ════════════════════════════════════════════════════
+  function renderStudentsTable() {
+    const users = getUsers().filter(u => u.role === "student");
+    document.getElementById("students-table").innerHTML = users.map(u => `
+      <tr>
+        <td><strong>${u.name}</strong></td>
+        <td>${u.email}</td>
+        <td><span class="badge badge-active">${u.role}</span></td>
+        <td style="color:var(--muted);font-size:0.78rem">${fmtDate(u.createdAt)}</td>
+        <td>
+          <button class="btn btn-danger btn-sm" onclick="deleteStudent('${u.id}')">🗑 Remove</button>
+        </td>
+      </tr>`).join("") ||
+      `<tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--muted)">No students registered.</td></tr>`;
+  }
+
+  function deleteStudent(id) {
+    if (!confirm("Remove this student account?")) return;
+    const users = getUsers().filter(u => u.id !== id);
+    localStorage.setItem("ep_users", JSON.stringify(users));
+    renderStudentsTable();
+    toast("Student removed.", "warning");
+  }
+
+  // ════════════════════════════════════════════════════
+  //  MODAL HELPERS
+  // ════════════════════════════════════════════════════
+  function showOverlay(id)  { document.getElementById(id).classList.add("show"); }
+  function closeModal(id)   { document.getElementById(id).classList.remove("show"); }
+
+  document.querySelectorAll(".overlay").forEach(o => {
+    o.addEventListener("click", e => { if (e.target === o) o.classList.remove("show"); });
+  });
+
+  // ── Initial render ──
+  renderOverview();
+
+
+  // ════════════════════════════════════════════════════
+  //  EXPORT STUDENTS DATA  (SheetJS / client-side)
+  // ════════════════════════════════════════════════════
+
+  function openExportModal() {
+    const modal = document.getElementById('export-modal');
+    // Populate student dropdown
+    const sel = document.getElementById('em-student-filter');
+    sel.innerHTML = '<option value="all">All Students</option>';
+    getUsers().filter(u => u.role === 'student').forEach(u => {
+      const opt = document.createElement('option');
+      opt.value = u.id; opt.textContent = u.name;
+      sel.appendChild(opt);
+    });
+    // Default date range: past 6 months → today
+    const today = new Date();
+    const sixMonthsAgo = new Date(today); sixMonthsAgo.setMonth(today.getMonth() - 6);
+    document.getElementById('em-date-from').value = sixMonthsAgo.toISOString().slice(0,10);
+    document.getElementById('em-date-to').value   = today.toISOString().slice(0,10);
+    updateExportPreview();
+    modal.classList.add('open');
+  }
+
+  function closeExportModal() {
+    document.getElementById('export-modal').classList.remove('open');
+  }
+
+  /** Build the filtered export dataset */
+  function buildExportData() {
+    const studentFilter = document.getElementById('em-student-filter').value;
+    const dateFrom      = document.getElementById('em-date-from').value;
+    const dateTo        = document.getElementById('em-date-to').value;
+    const allUsers      = getUsers().filter(u => u.role === 'student');
+    const allResults    = getAllResults();
+    const allExams      = getExams();
+
+    const rows = [];
+    allUsers.forEach(student => {
+      if (studentFilter !== 'all' && student.id !== studentFilter) return;
+      const results = allResults
+        .filter(r => r.userId === student.id)
+        .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+
+      results.forEach(r => {
+        const attemptDate = new Date(r.submittedAt);
+        if (dateFrom && attemptDate < new Date(dateFrom)) return;
+        if (dateTo   && attemptDate > new Date(dateTo + 'T23:59:59')) return;
+
+        const exam      = allExams.find(e => e.id === r.examId);
+        const examName  = exam ? exam.title : 'Unknown Exam';
+        const subject   = exam ? exam.subject : '—';
+        const maxScore  = r.maxScore || (exam ? exam.totalMarks : 0);
+        const finalScore = r.finalScore !== undefined ? r.finalScore : r.score;
+        const pct       = maxScore > 0 ? ((finalScore / maxScore) * 100).toFixed(1) + '%' : '—';
+        const status    = r.passed === true ? 'PASS' : r.passed === false ? 'FAIL' : 'Pending';
+
+        rows.push({
+          studentName : student.name,
+          email       : student.email,
+          examName,
+          subject,
+          marksObtained : finalScore,
+          maxMarks    : maxScore,
+          scorePercent : pct,
+          status,
+          dateOfAttempt : attemptDate.toLocaleDateString('en-IN', {
+            year: 'numeric', month: 'short', day: 'numeric'
+          }),
+          terminationReason: r.terminatedBy || 'manual',
+        });
+      });
+    });
+    return rows;
+  }
+
+  function updateExportPreview() {
+    const rows = buildExportData();
+    const sep  = document.getElementById('em-sheets-toggle').checked;
+    const studentFilter = document.getElementById('em-student-filter').value;
+    const unique = [...new Set(rows.map(r => r.studentName))];
+    const sheets = sep ? (unique.length + 1) : 1;
+    document.getElementById('em-preview-text').innerHTML =
+      '<b>' + rows.length + '</b> exam record' + (rows.length !== 1 ? 's' : '') +
+      ' across <b>' + unique.length + '</b> student' + (unique.length !== 1 ? 's' : '') +
+      '<br>File: <b>students_data.xlsx</b> &nbsp;·&nbsp; Sheets: <b>' + sheets + '</b>' +
+      (sep ? ' (1 combined + 1 per student)' : ' (1 combined)');
+  }
+
+  /** Header cell style helper */
+  function headerStyle() {
+    return {
+      font : { bold: true, color: { rgb: 'FFFFFF' }, sz: 11, name: 'Arial' },
+      fill : { patternType: 'solid', fgColor: { rgb: '1E3A5F' } },
+      alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+      border: {
+        top   : { style: 'thin', color: { rgb: 'FFFFFF' } },
+        bottom: { style: 'thin', color: { rgb: 'FFFFFF' } },
+        left  : { style: 'thin', color: { rgb: 'FFFFFF' } },
+        right : { style: 'thin', color: { rgb: 'FFFFFF' } },
+      }
+    };
+  }
+  function dataStyle(rowIdx, status) {
+    const bg = status === 'PASS' ? 'F0FDF4' : status === 'FAIL' ? 'FFF5F5' : 'FFFBEB';
+    return {
+      font : { sz: 10, name: 'Arial', color: { rgb: '1E293B' } },
+      fill : { patternType: 'solid', fgColor: { rgb: rowIdx % 2 === 0 ? bg : 'FFFFFF' } },
+      alignment: { horizontal: 'center', vertical: 'center' },
+      border: {
+        top   : { style: 'thin', color: { rgb: 'E2E8F0' } },
+        bottom: { style: 'thin', color: { rgb: 'E2E8F0' } },
+        left  : { style: 'thin', color: { rgb: 'E2E8F0' } },
+        right : { style: 'thin', color: { rgb: 'E2E8F0' } },
+      }
+    };
+  }
+
+  /** Build a single XLSX sheet from an array of row objects */
+  function buildSheet(rows) {
+    const COLS = [
+      { key: 'studentName',  header: 'Student Name',   wch: 22 },
+      { key: 'email',        header: 'Email / ID',      wch: 28 },
+      { key: 'examName',     header: 'Exam Name',       wch: 30 },
+      { key: 'subject',      header: 'Subject',         wch: 18 },
+      { key: 'marksObtained',header: 'Marks Obtained',  wch: 14 },
+      { key: 'maxMarks',     header: 'Max Marks',       wch: 10 },
+      { key: 'scorePercent', header: 'Score %',         wch: 10 },
+      { key: 'status',       header: 'Status',          wch: 10 },
+      { key: 'dateOfAttempt',header: 'Date of Attempt', wch: 18 },
+      { key: 'terminationReason', header: 'Submission',  wch: 14 },
+    ];
+
+    const ws = {};
+    const R0 = 0; // header row
+
+    // Header row
+    COLS.forEach((col, ci) => {
+      const addr = XLSX.utils.encode_cell({ r: R0, c: ci });
+      ws[addr] = { v: col.header, t: 's', s: headerStyle() };
+    });
+
+    // Data rows
+    rows.forEach((row, ri) => {
+      COLS.forEach((col, ci) => {
+        const addr = XLSX.utils.encode_cell({ r: R0 + 1 + ri, c: ci });
+        const val  = row[col.key] !== undefined ? row[col.key] : '';
+        const t    = (col.key === 'marksObtained' || col.key === 'maxMarks') ? 'n' : 's';
+        ws[addr]   = { v: val, t, s: dataStyle(ri, row.status) };
+      });
+    });
+
+    // Sheet range
+    ws['!ref'] = XLSX.utils.encode_range({
+      s: { r: 0, c: 0 },
+      e: { r: R0 + rows.length, c: COLS.length - 1 }
+    });
+
+    // Column widths
+    ws['!cols'] = COLS.map(c => ({ wch: c.wch }));
+
+    // Freeze top row
+    ws['!freeze'] = { xSplit: 0, ySplit: 1, topLeftCell: 'A2', activePane: 'bottomLeft', state: 'frozen' };
+
+    return ws;
+  }
+
+  /** Add a summary meta sheet */
+  function buildSummarySheet(rows, generated) {
+    const ws = {};
+    const meta = [
+      ['ExamPortal – Student Data Export'],
+      ['Generated on', generated],
+      ['Total Records', rows.length],
+      ['Total Students', [...new Set(rows.map(r => r.studentName))].length],
+      ['Total Exams Covered', [...new Set(rows.map(r => r.examName))].length],
+      [''],
+      ['Pass Count', rows.filter(r => r.status === 'PASS').length],
+      ['Fail Count', rows.filter(r => r.status === 'FAIL').length],
+      ['Pending Count', rows.filter(r => r.status === 'Pending').length],
+    ];
+    meta.forEach((rowData, ri) => {
+      rowData.forEach((val, ci) => {
+        const addr = XLSX.utils.encode_cell({ r: ri, c: ci });
+        const isTitleRow = ri === 0;
+        ws[addr] = {
+          v: val,
+          t: typeof val === 'number' ? 'n' : 's',
+          s: isTitleRow ? {
+            font: { bold: true, sz: 14, name: 'Arial', color: { rgb: '0D1B2A' } },
+            fill: { patternType: 'solid', fgColor: { rgb: 'EFF6FF' } },
+          } : ci === 0 ? {
+            font: { bold: true, sz: 10, name: 'Arial', color: { rgb: '334155' } },
+          } : {
+            font: { sz: 10, name: 'Arial', color: { rgb: '1E293B' } },
+          }
+        };
+      });
+    });
+    ws['!ref'] = XLSX.utils.encode_range({ s: {r:0,c:0}, e: {r: meta.length-1, c:1} });
+    ws['!cols'] = [{ wch: 24 }, { wch: 20 }];
+    return ws;
+  }
+
+  function runExport() {
+    const rows = buildExportData();
+    if (!rows.length) {
+      showExportToast('⚠️ No records match your filters.', 3000);
+      return;
+    }
+
+    const btn = document.getElementById('em-download-btn');
+    btn.textContent = '⏳ Building file…'; btn.classList.add('loading');
+
+    setTimeout(() => {
+      try {
+        const wb = XLSX.utils.book_new();
+        const sep = document.getElementById('em-sheets-toggle').checked;
+        const generated = new Date().toLocaleString('en-IN', {
+          day:'2-digit', month:'short', year:'numeric',
+          hour:'2-digit', minute:'2-digit'
+        });
+
+        // Sheet 1 – Summary / Meta info
+        XLSX.utils.book_append_sheet(wb, buildSummarySheet(rows, generated), '📋 Summary');
+
+        // Sheet 2 – All data combined
+        XLSX.utils.book_append_sheet(wb, buildSheet(rows), '📊 All Students');
+
+        // Optional: per-student sheets
+        if (sep) {
+          const byStudent = {};
+          rows.forEach(r => {
+            const key = r.studentName;
+            if (!byStudent[key]) byStudent[key] = [];
+            byStudent[key].push(r);
+          });
+          Object.entries(byStudent).forEach(([name, stuRows]) => {
+            // Sheet names max 31 chars, strip special chars
+            const sheetName = ('👤 ' + name).slice(0, 31);
+            XLSX.utils.book_append_sheet(wb, buildSheet(stuRows), sheetName);
+          });
+        }
+
+        // Write and download
+        XLSX.writeFile(wb, 'students_data.xlsx');
+        closeExportModal();
+        showExportToast('✅ students_data.xlsx downloaded successfully!', 3500);
+      } catch(err) {
+        console.error('Export error:', err);
+        showExportToast('❌ Export failed: ' + err.message, 4000);
+      } finally {
+        btn.innerHTML = '⬇ Download Excel'; btn.classList.remove('loading');
+      }
+    }, 80); // small delay so the button state renders
+  }
+
+  function showExportToast(msg, duration = 3000) {
+    const toast = document.getElementById('export-toast');
+    const span  = document.getElementById('export-toast-msg');
+    span.textContent = msg;
+    // strip emoji from toast div's own prefix since msg includes it
+    toast.textContent = '';
+    toast.appendChild(span);
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), duration);
+  }
+
+  // Close export modal on backdrop click
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('export-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeExportModal();
+    });
+  });
+
+  // ════════════════════════════════════════════════════
+  //  SUBJECT MANAGEMENT
+  // ════════════════════════════════════════════════════
+
+  /** Count how many questions across all exams use a given subject_id */
+  function countQuestionsForSubject(subjectId) {
+    return getExams().reduce((total, exam) =>
+      total + (exam.questions || []).filter(q => q.subject_id === subjectId).length, 0);
+  }
+
+  /** Colour dot class by index (cycles through 8) */
+  function dotClass(idx) { return "dot-c" + (idx % 8); }
+
+  /** Render the full Subjects section */
+  function renderSubjectsSection() {
+    renderSubjectList();
+    renderSubjectStats();
+  }
+
+  /** Render the subject list <ul> */
+  function renderSubjectList(filter) {
+    const subjects = getSubjects();
+    const ul = document.getElementById("subject-list-ul");
+    const countEl = document.getElementById("subj-total-count");
+    if (countEl) countEl.textContent = subjects.length;
+
+    const visible = filter
+      ? subjects.filter(s => s.name.toLowerCase().includes(filter.toLowerCase()))
+      : subjects;
+
+    if (!visible.length) {
+      ul.innerHTML = `<li class="subj-empty">${
+        filter ? "No subjects match your search." : "No subjects yet. Add one using the form on the left."
+      }</li>`;
+      return;
+    }
+
+    ul.innerHTML = visible.map((s, i) => {
+      const qCount = countQuestionsForSubject(s.id);
+      return `<li class="subject-item" id="subj-li-${s.id}">
+        <div class="subj-color-dot ${dotClass(i)}"></div>
+        <span class="subj-name">${s.name}</span>
+        <span class="subj-id-badge">${s.id}</span>
+        <span class="subj-q-count">${qCount} question${qCount !== 1 ? "s" : ""}</span>
+        <button class="btn-del-subject" title="Delete subject"
+                onclick="confirmDeleteSubject('${s.id}', '${s.name.replace(/'/g,"\\'")}', ${qCount})">🗑</button>
+      </li>`;
+    }).join("");
+  }
+
+  /** Render the stat pills above the add form */
+  function renderSubjectStats() {
+    const subjects = getSubjects();
+    const totalQ   = getExams().reduce((t, e) => t + (e.questions || []).length, 0);
+    const tagged   = getExams().reduce((t, e) =>
+      t + (e.questions || []).filter(q => q.subject_id).length, 0);
+    const untagged = totalQ - tagged;
+
+    const pills = document.getElementById("subj-stats-pills");
+    if (!pills) return;
+    pills.innerHTML = `
+      <div class="subj-stat-pill">📂 ${subjects.length} subject${subjects.length !== 1 ? "s" : ""}</div>
+      <div class="subj-stat-pill">❓ ${totalQ} questions total</div>
+      ${untagged > 0 ? `<div class="subj-stat-pill" style="background:#FEF3C7;color:#92400E">⚠ ${untagged} untagged</div>` : ""}
+    `;
+  }
+
+  /** Add a new subject */
+  function addSubject() {
+    const input = document.getElementById("new-subject-input");
+    const name  = input.value.trim();
+
+    if (!name) {
+      toast("Please enter a subject name.", "error"); return;
+    }
+    // Duplicate check (case-insensitive)
+    const exists = getSubjects().find(s => s.name.toLowerCase() === name.toLowerCase());
+    if (exists) {
+      toast(`"${name}" already exists.`, "error"); return;
+    }
+
+    const newSubject = { id: "sub_" + Date.now(), name };
+    saveSubject(newSubject);
+    input.value = "";
+    renderSubjectsSection();
+    toast(`Subject "${name}" added!`, "success");
+  }
+
+  /** Confirm before deleting — warns if questions are linked */
+  function confirmDeleteSubject(id, name, qCount) {
+    const msg = qCount > 0
+      ? `"${name}" is linked to ${qCount} question${qCount !== 1 ? "s" : ""}.\n\nDeleting it will remove the subject tag from those questions (the questions themselves will NOT be deleted).\n\nContinue?`
+      : `Delete subject "${name}"?`;
+    if (!confirm(msg)) return;
+    doDeleteSubject(id, name);
+  }
+
+  /** Actually delete the subject and untag linked questions */
+  function doDeleteSubject(id, name) {
+    // Untag questions that reference this subject_id
+    const exams = getExams();
+    exams.forEach(exam => {
+      let changed = false;
+      (exam.questions || []).forEach(q => {
+        if (q.subject_id === id) { delete q.subject_id; changed = true; }
+      });
+      if (changed) saveExam(exam);
+    });
+
+    deleteSubject(id);
+    renderSubjectsSection();
+    toast(`Subject "${name}" deleted.`, "warning");
+  }
+
+  /** Live-filter the subject list by search input */
+  function filterSubjectList(query) {
+    renderSubjectList(query);
+  }
+
+  // ════════════════════════════════════════════════════
+  //  QUESTION IMAGE UPLOAD  (FileReader → base64)
+  // ════════════════════════════════════════════════════
+  const MAX_IMG_BYTES = 2 * 1024 * 1024;   // 2 MB
+  const ALLOWED_TYPES = ["image/jpeg","image/png","image/gif","image/webp"];
+
+  /** Called when user picks a file via the file input */
+  function handleImgSelect(file) {
+    if (!file) return;
+    validateAndPreview(file);
+  }
+
+  /** Drag-over: highlight drop zone */
+  function handleImgDragOver(e) {
+    e.preventDefault();
+    document.getElementById("img-drop-zone").classList.add("drag-over");
+  }
+  function handleImgDragLeave(e) {
+    document.getElementById("img-drop-zone").classList.remove("drag-over");
+  }
+
+  /** Drop: extract file from drag event */
+  function handleImgDrop(e) {
+    e.preventDefault();
+    document.getElementById("img-drop-zone").classList.remove("drag-over");
+    const file = e.dataTransfer?.files?.[0];
+    if (file) validateAndPreview(file);
+  }
+
+  /** Validate type + size, then read as base64 and show preview */
+  function validateAndPreview(file) {
+    const errEl = document.getElementById("img-error-msg");
+    errEl.classList.remove("show");
+
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      errEl.classList.add("show"); return;
+    }
+    if (file.size > MAX_IMG_BYTES) {
+      errEl.textContent = `⚠ File too large (${(file.size/1024/1024).toFixed(1)} MB). Max is 2 MB.`;
+      errEl.classList.add("show"); return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const base64 = ev.target.result;  // "data:image/jpeg;base64,..."
+      // Store in hidden field (this is what gets saved to the question object)
+      document.getElementById("qf-image-data").value = base64;
+      showImgPreview(base64, file.name, file.size);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /** Render the preview panel */
+  function showImgPreview(src, name, bytes) {
+    document.getElementById("img-preview-el").src  = src;
+    document.getElementById("img-file-name").textContent = name || "image";
+    document.getElementById("img-file-size").textContent =
+      bytes ? `${(bytes/1024).toFixed(0)} KB` : "";
+    document.getElementById("img-preview-wrap").classList.add("visible");
+    document.getElementById("img-drop-zone").style.display = "none";
+  }
+
+  /** Remove the image from the form */
+  function removeQImage() {
+    document.getElementById("qf-image-data").value = "";
+    document.getElementById("qf-image-file").value = "";
+    document.getElementById("img-preview-wrap").classList.remove("visible");
+    document.getElementById("img-drop-zone").style.display = "";
+    document.getElementById("img-preview-el").src = "";
+    document.getElementById("img-error-msg").classList.remove("show");
+  }
+
+  /** Reset the upload zone when modal opens for a new question */
+  function resetImgUpload(existingBase64) {
+    removeQImage();
+    if (existingBase64) {
+      document.getElementById("qf-image-data").value = existingBase64;
+      showImgPreview(existingBase64, "existing image", null);
+    }
+  }
+
+  // ── Lightbox for full-size image preview in questions table ──
+  function openLightbox(src) {
+    const lb = document.getElementById("img-lightbox");
+    lb.querySelector("img").src = src;
+    lb.classList.add("open");
+  }
+  function closeLightbox() {
+    const lb = document.getElementById("img-lightbox");
+    lb.classList.remove("open");
+    lb.querySelector("img").src = "";
+  }
+
+  </script>
+
+<!-- ── IMAGE LIGHTBOX ── -->
+<div id="img-lightbox" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <img src="" alt="Question image" onclick="event.stopPropagation()" />
+</div>
+
+</body>
+</html>
