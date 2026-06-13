@@ -566,3 +566,168 @@ body {
 .top-logo img:hover {
     transform: scale(1.05);
 }
+
+
+/* =====================================
+   RESPONSIVE FIXES
+   Add at END of style.css
+===================================== */
+
+/* Make all images responsive */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Fix large profile image */
+.about-image img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+}
+
+/* Fix latest news width issue */
+.news-box {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+
+    .hero {
+        padding: 120px 30px 50px;
+    }
+
+    .about-row {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .about-text {
+        width: 100%;
+    }
+
+    .about-image img {
+        max-width: 320px;
+    }
+
+    .powered-container {
+        flex-direction: column;
+        padding: 30px;
+    }
+
+    .societies,
+    .news-box {
+        width: 100%;
+    }
+
+    .research-section {
+        padding: 30px;
+    }
+
+    .contact-section {
+        padding: 100px 30px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    .navbar {
+        padding: 12px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .nav-links a {
+        font-size: 14px;
+    }
+
+    .hero {
+        padding: 110px 15px 40px;
+    }
+
+    .hero-content h1 {
+        font-size: 30px;
+    }
+
+    .hero-content p {
+        font-size: 15px;
+        line-height: 1.8;
+    }
+
+    .message h3 {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .social-buttons {
+        flex-wrap: wrap;
+    }
+
+    .about-image img {
+        max-width: 250px;
+    }
+
+    .news-item img {
+        height: 220px;
+    }
+
+    .powered-container {
+        padding: 20px;
+    }
+
+    .research-section {
+        padding: 20px;
+    }
+
+    .contact-section {
+        padding: 90px 20px;
+    }
+
+    .publication-container {
+        margin-top: 100px;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+
+    .hero-content h1 {
+        font-size: 24px;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+    }
+
+    .about-image img {
+        max-width: 200px;
+    }
+
+    .news-item img {
+        height: 180px;
+    }
+
+    .social-btn {
+        transform: scale(0.9);
+    }
+
+    .message h3 {
+        font-size: 14px;
+    }
+
+    .nav-links {
+        gap: 8px;
+    }
+
+    .nav-links a {
+        font-size: 13px;
+    }
+}
