@@ -784,3 +784,32 @@ line-height:1.7;
     border-left:5px solid #f59e0b;
     background:#fffdf7;
 }
+
+.course-tags{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-top:12px;
+}
+
+.course-tags span{
+background:#eef4ff;
+color:#1d4ed8;
+border:1px solid #c7d7ff;
+padding:8px 14px;
+border-radius:20px;
+font-size:14px;
+font-weight:500;
+transition:0.3s;
+}
+
+.course-tags span:hover{
+background:#1d4ed8;
+color:white;
+}
+
+.service-card h4{
+margin-bottom:12px;
+color:#374151;
+}
+
