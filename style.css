@@ -750,3 +750,33 @@ img {
         padding: 90px 20px 20px;
     }
 }
+/* Professional Activities Section */
+
+.review-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:12px;
+margin-top:10px;
+}
+
+.review-grid div{
+background:#f8fafc;
+padding:12px 15px;
+border-left:4px solid #2563eb;
+border-radius:8px;
+transition:0.3s;
+}
+
+.review-grid div:hover{
+transform:translateY(-3px);
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.service-card h3{
+color:#1d4ed8;
+}
+
+.service-card ul li{
+margin-bottom:10px;
+line-height:1.7;
+}
