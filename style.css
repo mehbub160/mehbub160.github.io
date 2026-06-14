@@ -833,3 +833,32 @@ left:0;
 color:#2563eb;
 font-size:12px;
 }
+.teaching-list{
+    list-style:none;
+    padding-left:0;
+    margin-top:10px;
+}
+
+.teaching-list li{
+    position:relative;
+    padding-left:24px;
+    margin-bottom:10px;
+    line-height:1.7;
+}
+
+.teaching-list li::before{
+    content:"◆";
+    position:absolute;
+    left:0;
+    color:#2563eb;
+    font-size:12px;
+}
+
+.teaching-list strong{
+    color:#1d4ed8;
+}
+
+.service-card h4{
+    margin-bottom:12px;
+    color:#374151;
+}
