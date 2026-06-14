@@ -862,3 +862,53 @@ font-size:12px;
     margin-bottom:12px;
     color:#374151;
 }
+.teaching-timeline{
+display:flex;
+flex-direction:column;
+gap:25px;
+}
+
+.teaching-card{
+background:#fff;
+border:1px solid #e5e7eb;
+border-radius:14px;
+padding:25px;
+box-shadow:0 6px 20px rgba(0,0,0,0.05);
+}
+
+.current-role{
+border-left:5px solid #2563eb;
+}
+
+.teaching-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+}
+
+.teaching-header span{
+color:#6b7280;
+font-size:14px;
+}
+
+.teaching-card h3{
+color:#1d4ed8;
+margin-bottom:15px;
+}
+
+.semester-block{
+margin-top:15px;
+}
+
+.semester-block h4{
+margin-bottom:8px;
+}
+
+.teaching-card ul{
+padding-left:20px;
+}
+
+.teaching-card li{
+margin-bottom:8px;
+}
