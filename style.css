@@ -780,3 +780,7 @@ color:#1d4ed8;
 margin-bottom:10px;
 line-height:1.7;
 }
+.editorial-card{
+    border-left:5px solid #f59e0b;
+    background:#fffdf7;
+}
