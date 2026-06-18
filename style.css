@@ -1080,3 +1080,45 @@ margin-bottom:8px;
     max-width:120px;
     height:auto;
 }
+.education-society-row{
+    display:flex;
+    gap:50px;
+    align-items:flex-start;
+}
+
+.education-column{
+    flex:2;
+}
+
+.societies-column{
+    flex:1;
+}
+
+.societies-column h2{
+    color:#1d4ed8;
+    margin-bottom:25px;
+}
+
+.society-logos{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.logo-card{
+    width:130px;
+    height:100px;
+    border:1px solid #dcdcdc;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+}
+
+.logo-card img{
+    max-width:90px;
+    max-height:60px;
+}
+
+
