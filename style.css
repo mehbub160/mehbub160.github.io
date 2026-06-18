@@ -957,3 +957,68 @@ margin-bottom:8px;
         background-position: 300% center;
     }
 }
+/* Research Highlights Box */
+
+.research-news-box{
+    width: 420px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.research-news-box h2{
+    color: #1d4ed8;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.research-news-container{
+    height: 420px;
+    overflow: hidden;
+    position: relative;
+}
+
+.research-news-scroll{
+    animation: scrollNews 35s linear infinite;
+}
+
+.research-news-container:hover .research-news-scroll{
+    animation-play-state: paused;
+}
+
+.research-item{
+    background: #f8fafc;
+    border-left: 4px solid #2563eb;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+}
+
+.research-item p{
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.news-date{
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+    background: #2563eb;
+    padding: 4px 8px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+}
+
+@keyframes scrollNews{
+    0%{
+        transform: translateY(0);
+    }
+    100%{
+        transform: translateY(-50%);
+    }
+}
