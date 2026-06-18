@@ -1046,8 +1046,9 @@ margin-bottom:8px;
     display:flex;
     justify-content:center;
     align-items:flex-start;
-    gap:40px;
-    margin-top:20px;
+    gap:60px;
+    max-width:1200px;
+    margin:0 auto;
 }
 
 .education-column{
@@ -1055,7 +1056,7 @@ margin-bottom:8px;
 }
 
 .societies-column{
-    width:320px;
+    width:250px;
 }
 
 .societies-column h2{
@@ -1068,30 +1069,21 @@ margin-bottom:8px;
     justify-content:center;
     align-items:center;
     flex-wrap:wrap;
-    gap:20px;
-    padding:30px;
-    border:1px solid #dcdcdc;
-    border-radius:16px;
-    background:#fff;
+    gap:15px;
 }
 
 .logo-card{
-    width:130px;
-    height:100px;
+    width:120px;
+    height:90px;
     border:1px solid #dcdcdc;
     border-radius:12px;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     background:#fff;
-    transition:0.3s;
-}
-
-.logo-card:hover{
-    transform:translateY(-4px);
 }
 
 .logo-card img{
-    max-width:90px;
-    max-height:60px;
+    max-width:80px;
+    max-height:55px;
 }
