@@ -1062,6 +1062,7 @@ margin-bottom:8px;
 .societies-column h2{
     color:#1d4ed8;
     margin-bottom:25px;
+    white-space:nowrap;
 }
 
 .society-logos{
