@@ -921,3 +921,39 @@ margin-bottom:8px;
 .research-experience-container .service-card {
     width: 100%;
 }
+.open-positions {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.animated-gradient-text {
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.7;
+    background: linear-gradient(
+        90deg,
+        #0066ff,
+        #00c6ff,
+        #00cc66,
+        #ff9900,
+        #0066ff
+    );
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientMove 6s linear infinite;
+    margin-bottom: 12px;
+}
+
+.animated-gradient-text.delay {
+    animation-duration: 8s;
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 300% center;
+    }
+}
