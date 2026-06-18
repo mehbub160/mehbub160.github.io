@@ -1048,7 +1048,7 @@ margin-bottom:8px;
     align-items:flex-start;
     gap:60px;
     max-width:1200px;
-    margin:0 auto;
+    margin:0 auto 20px auto;
 }
 
 .education-column{
