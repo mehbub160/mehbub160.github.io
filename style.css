@@ -1042,56 +1042,20 @@ margin-bottom:8px;
     border-radius: 12px;
     padding: 20px;
 }
-.education-society-container{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    gap:50px;
-}
-
-.education-column{
-    flex:2;
-}
-
-.society-column{
-    flex:1;
-}
-
-.society-column h2{
-    color:#1d4ed8;
-    margin-bottom:25px;
-}
-
-.society-box{
-    border:1px solid #d1d5db;
-    border-radius:16px;
-    padding:30px;
-    background:#fff;
-    text-align:center;
-}
-
-.society-box .logo-card{
-    display:inline-flex;
-    justify-content:center;
-    align-items:center;
-}
-
-.society-box img{
-    max-width:120px;
-    height:auto;
-}
 .education-society-row{
     display:flex;
-    gap:50px;
+    justify-content:center;
     align-items:flex-start;
+    gap:40px;
+    margin-top:20px;
 }
 
 .education-column{
-    flex:2;
+    width:700px;
 }
 
 .societies-column{
-    flex:1;
+    width:320px;
 }
 
 .societies-column h2{
@@ -1101,8 +1065,14 @@ margin-bottom:8px;
 
 .society-logos{
     display:flex;
+    justify-content:center;
+    align-items:center;
     flex-wrap:wrap;
     gap:20px;
+    padding:30px;
+    border:1px solid #dcdcdc;
+    border-radius:16px;
+    background:#fff;
 }
 
 .logo-card{
@@ -1114,11 +1084,14 @@ margin-bottom:8px;
     align-items:center;
     justify-content:center;
     background:#fff;
+    transition:0.3s;
+}
+
+.logo-card:hover{
+    transform:translateY(-4px);
 }
 
 .logo-card img{
     max-width:90px;
     max-height:60px;
 }
-
-
