@@ -55,7 +55,7 @@ body {
 }
 .hero {
     padding: 120px 80px 60px;
-    min-height: 100vh;
+    min-height: auto;
     display: flex;
     align-items: center;
 }
