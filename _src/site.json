@@ -1,0 +1,32 @@
+{
+  "name": "Mehbub Alam",
+  "fullName": "Dr. Mehbub Alam",
+  "role": "Assistant Professor",
+  "department": "Department of Computer Science and Engineering",
+  "organization": "Indian Institute of Information Technology Raichur",
+  "organizationUrl": "https://iiitr.ac.in/",
+  "facultyPage": "https://iiitr.ac.in/faculty/mehbub",
+  "origin": "https://mehbubalam.com",
+  "email": "mehbub@iiitr.ac.in",
+  "altEmail": "mehbub.alam.cs@gmail.com",
+  "office": "Room No. 111, Admin Building, IIIT Raichur",
+  "address": "Wadavatti, Gadwal Road, Raichur, Karnataka 584102, India",
+  "keywords": "Mehbub Alam, Dr Mehbub Alam, Assistant Professor, IIIT Raichur, Drone Security, UAV Authentication, Remote ID, Cybersecurity, IoT, Internet of Things, Edge Computing, Fog Computing, Wi-Fi HaLow, IEEE 802.11ah, Wireless Networks, IIIT Guwahati, Khalifa University, Researcher",
+  "nav": [
+    { "label": "Home", "href": "index.html", "key": "home" },
+    { "label": "About", "href": "about.html", "key": "about" },
+    { "label": "Research", "href": "research.html", "key": "research" },
+    { "label": "Publications", "href": "publications.html", "key": "publications" },
+    { "label": "Teaching", "href": "portal.html", "key": "teaching" },
+    { "label": "Service & Awards", "href": "service.html", "key": "service" },
+    { "label": "Contact", "href": "contact.html", "key": "contact" }
+  ],
+  "social": [
+    { "key": "scholar", "label": "Google Scholar", "url": "https://scholar.google.com/citations?user=BFOhVCkAAAAJ", "icon": "scholar" },
+    { "key": "orcid", "label": "ORCID", "url": "https://orcid.org/0000-0003-0329-8765", "icon": "orcid" },
+    { "key": "researchgate", "label": "ResearchGate", "url": "https://www.researchgate.net/profile/Mehbub-Alam-2", "icon": "researchgate" },
+    { "key": "linkedin", "label": "LinkedIn", "url": "https://www.linkedin.com/in/mehbubalam/", "icon": "linkedin" },
+    { "key": "github", "label": "GitHub", "url": "https://github.com/mehbub160", "icon": "github" },
+    { "key": "email", "label": "Email", "url": "mailto:mehbub@iiitr.ac.in", "icon": "email" }
+  ]
+}

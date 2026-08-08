@@ -1,0 +1,1037 @@
+{
+  "publications": [
+    {
+      "id": "uav-remote-id-pki",
+      "ref": "J1",
+      "type": "journal",
+      "title": "Authentication Protocols for UAV Remote Identification Using Public-Key Infrastructure",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Mariam Alhashmi",
+          "me": false
+        },
+        {
+          "name": "Mohammad Atrouz",
+          "me": false
+        },
+        {
+          "name": "Abdulrahman Khader",
+          "me": false
+        },
+        {
+          "name": "Ravi Ashok Pashchapur",
+          "me": false
+        },
+        {
+          "name": "Abdulhadi Shoufan",
+          "me": false
+        }
+      ],
+      "venue": "Computers & Security",
+      "publisher": "Elsevier",
+      "year": "2026",
+      "metrics": [
+        "Impact Factor 6.8",
+        "Q1",
+        "Top 1%"
+      ],
+      "topics": [
+        "UAV Security",
+        "Remote ID",
+        "PKI",
+        "Authentication"
+      ],
+      "presentation": {
+        "slug": "uav-remote-id-pki",
+        "pdf": "Presentations/UAV1.pdf",
+        "slides": 5
+      },
+      "highlights": [],
+      "venueShort": "Computers & Security",
+      "volume": "",
+      "pages": "105075",
+      "doi": "10.1016/j.cose.2026.105075",
+      "publisherUrl": "https://www.sciencedirect.com/science/article/pii/S0167404826002518",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "Computers & Security",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "volumetric-medical-imaging-review",
+      "ref": "J2",
+      "type": "journal",
+      "title": "A Comprehensive Review Tracing the Evolution of Volumetric Medical Imaging Analysis from Classic CNNs to Emerging AI-Agents",
+      "authors": [
+        {
+          "name": "Muhammad Owais",
+          "me": false
+        },
+        {
+          "name": "Muhammad Zubair",
+          "me": false
+        },
+        {
+          "name": "Daniya Najiha Abdul Kareem",
+          "me": false
+        },
+        {
+          "name": "Sana Akhtar Naseer",
+          "me": false
+        },
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Mubashir Ahmad",
+          "me": false
+        },
+        {
+          "name": "Irfan Hussain",
+          "me": false
+        }
+      ],
+      "venue": "Archives of Computational Methods in Engineering",
+      "publisher": "Springer",
+      "year": "2026",
+      "metrics": [
+        "Impact Factor 12.9",
+        "Q1"
+      ],
+      "topics": [
+        "Medical Imaging",
+        "Deep Learning",
+        "Foundation Models",
+        "AI Agents"
+      ],
+      "presentation": {
+        "slug": "volumetric-medical-imaging-review",
+        "pdf": "Presentations/3dCNN1.pdf",
+        "slides": 5
+      },
+      "highlights": [],
+      "venueShort": "Archives of Computational Methods in Engineering",
+      "volume": "",
+      "pages": "",
+      "doi": "10.1007/s11831-026-10738-w",
+      "publisherUrl": "https://link.springer.com/article/10.1007/s11831-026-10738-w",
+      "pdfUrl": "https://link.springer.com/content/pdf/10.1007/s11831-026-10738-w.pdf",
+      "abstract": "Volumetric medical imaging has redefined modern healthcare, enabling precise diagnosis, prognosis, and treatment planning. During the past decade, the field has undergone a paradigm shift from classical deep learning architectures to multimodal, agent-driven AI systems capable of uncovering rich volumetric biomarkers and utilizing heterogeneous data for predictive and generative modeling. Existing surveys are fragmented, focusing on specific models or tasks instead of offering a unified view of volumetric learning evolution. This study traces the evolution from classical models (Convolutional Neural Networks, Recurrent Neural Networks, and transformers) to generative approaches (Variational Autoencoders, Generative Adversarial Networks, and diffusion models) and finally to foundation models and AI-agents that enable advanced reasoning and adaptive clinical workflows. As the reported performance varies substantially across datasets, imaging modalities, and evaluation protocols, this review emphasizes methodological evolution, representative innovations, and practical implications rather than direct numerical ranking of competing architectures. For each paradigm, we critically assess methodological innovations, strengths, limitations, and comparative performance in segmentation, classification, detection, reconstruction, and report generation. Beyond synthesizing progress, we identify persistent challenges, including data scarcity, generalization between institutions, and clinical trustworthiness, and outline emerging frontiers in multimodal fusion, explainable AI, and human–AI collaboration. This review provides a unified framework for understanding the evolution of volumetric medical imaging and offers actionable insights for researchers, clinicians, and industry practitioners, contributing to the development of reliable, interpretable, and clinically deployable next-generation medical AI systems. To support further research, we provide a GitHub repository that includes popular 3D medical imaging datasets with recent 3D models in our shared GitHub repository (https://github.com/Owais-CodeHub/3D-Medical-Imaging-Review).",
+      "keywords": [],
+      "publishedVenue": "Archives of Computational Methods in Engineering",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "seabed-defects-fusion-ml",
+      "ref": "J3",
+      "type": "journal",
+      "title": "Fusion-Based Machine Learning Approach for Classification of Seabed Defects",
+      "authors": [
+        {
+          "name": "Sk Mahmudul Hassan",
+          "me": false
+        },
+        {
+          "name": "Kumar Sekhar Roy",
+          "me": false
+        },
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Sudip Chakraborty",
+          "me": false
+        },
+        {
+          "name": "Marcello Di Bonito",
+          "me": false
+        },
+        {
+          "name": "Ruhul A. Hazarika",
+          "me": false
+        }
+      ],
+      "venue": "Earth Systems and Environment",
+      "publisher": "Springer",
+      "year": "2026",
+      "metrics": [
+        "Impact Factor 5.0",
+        "Q1"
+      ],
+      "topics": [
+        "Computer Vision",
+        "Vision Transformer",
+        "Underwater Inspection"
+      ],
+      "presentation": null,
+      "highlights": [],
+      "venueShort": "Earth Systems and Environment",
+      "volume": "",
+      "pages": "",
+      "doi": "10.1007/s41748-026-01296-z",
+      "publisherUrl": "https://link.springer.com/article/10.1007/s41748-026-01296-z",
+      "pdfUrl": "https://link.springer.com/content/pdf/10.1007/s41748-026-01296-z.pdf",
+      "abstract": "Accurate classification of the seabed defects is crucial in safeguarding the safety, reliability, and maintenance of underwater infrastructure, including pipelines, cables, and offshore platforms. Classification of underwater images remains a challenging task due to issues such as low visibility, scattering, color distortion, and multi-scale variations in underwater environments. To address these challenges, this study proposes IEResViT, a novel fusion-based hybrid architecture that integrates a Depthwise Inception Convolutional Neural Network (CNN) with a modified Vision Transformer (ViT) framework. The proposed model replaces the traditional multilayer perceptron (MLP) block in the transformer encoder with a ResNet-based residual connection (ResMLP) to enhance hierarchical feature extraction and reduce computational complexity. The architecture processes images through parallel CNN and transformer branches to capture both local and global feature representations, followed by feature fusion and classification. The proposed model was evaluated on the Aquatic Defect dataset, AQUA20 dataset and Marine_PULSE dataset, achieving high classification performance with an accuracy of 98.88% 98.65% and 95.65% respectively, outperforming several state-of-the-art deep learning models while using fewer parameters and reduced computational cost. The results demonstrate that the IEResViT model provides an efficient and lightweight solution for reliable underwater defect image classification.",
+      "keywords": [
+        "Deep learning",
+        "Aquatic defect detection",
+        "Computer vision",
+        "Attention mechanisms",
+        "Self-attention",
+        "Multi-head attention"
+      ],
+      "publishedVenue": "Earth Systems and Environment",
+      "linkVerified": true,
+      "note": "SpringerLink prints the title as “A Fusion-based Machine Learning Approach for Classification of Seabed Defects”."
+    },
+    {
+      "id": "plant-leaf-vit",
+      "ref": "J4",
+      "type": "journal",
+      "title": "Multi-kernel Inception-Enhanced Vision Transformer for Plant Leaf Disease Recognition",
+      "authors": [
+        {
+          "name": "Sk Mahmudul Hassan",
+          "me": false
+        },
+        {
+          "name": "Kumar Sekhar Roy",
+          "me": false
+        },
+        {
+          "name": "Ruhul A. Hazarika",
+          "me": false
+        },
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Mithun Mukherjee",
+          "me": false
+        }
+      ],
+      "venue": "Scientific Reports",
+      "publisher": "Nature Portfolio",
+      "year": "2025",
+      "volume": "15",
+      "pages": "30997",
+      "metrics": [
+        "Impact Factor 3.9",
+        "Q1"
+      ],
+      "topics": [
+        "Deep Learning",
+        "Vision Transformer",
+        "Precision Agriculture"
+      ],
+      "presentation": null,
+      "highlights": [],
+      "venueShort": "Scientific Reports",
+      "doi": "10.1038/s41598-025-16142-x",
+      "publisherUrl": "https://www.nature.com/articles/s41598-025-16142-x",
+      "pdfUrl": "https://www.nature.com/articles/s41598-025-16142-x.pdf",
+      "abstract": "The timely and precise identification of diseases in plants is essential for efficient disease control and safeguarding of crops. Manual identification of diseases requires expert knowledge in the field, and finding people with domain knowledge is challenging. To overcome the challenge, computer vision-based machine learning techniques have been proposed by the researchers in recent years. Most of these solutions with the standard convolutional neural network (CNN) approaches use uniform background laboratory setup leaf images to identify the diseases. However, only a few works considered real-field images in their work. Therefore, there is a need for a robust CNN architecture that can identify the diseases in plants in both laboratory and real-field conditioned images. In this paper, we have proposed an Inception-Enhanced Vision Transformer (IEViT) architecture to identify diseases in plants. The proposed IEViT architecture extracts local as well as global features, which improves feature learning. The use of multiple filters with different kernel sizes efficiently uses computing resources to extract relevant features without the need for deeper networks. The robustness of the proposed architecture is established by hyper-parameter tuning and comparison with state-of-the-art. In the experiment, we consider five datasets with both laboratory-conditioned and real-field conditioned images. From the experimental results, we see that the proposed model outperforms state-of-the-art deep learning models with fewer parameters. The proposed model achieves an accuracy rate of 99.23% for the apple leaf dataset, 99.70% for the rice dataset, 97.02% for the ibean dataset, 76.51% for the cassava leaf dataset, and 99.41% for the plantvillage dataset.",
+      "keywords": [
+        "Plant disease",
+        "Machine learning",
+        "Vision transformer",
+        "Deep learning",
+        "Plant sciences",
+        "Engineering"
+      ],
+      "publishedVenue": "Scientific Reports",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "aquafusionnet",
+      "ref": "J5",
+      "type": "journal",
+      "title": "AquaFusionNet: A Deep Feature Fusion and Attention-Based Approach for Accurate Underwater Defect Detection",
+      "authors": [
+        {
+          "name": "Baharul Islam",
+          "me": false
+        },
+        {
+          "name": "Nasim Ahmad",
+          "me": false
+        },
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Sk Mahmudul Hassan",
+          "me": false
+        },
+        {
+          "name": "Sudip Chakraborty",
+          "me": false
+        },
+        {
+          "name": "Khaled A. Mahmoud",
+          "me": false
+        },
+        {
+          "name": "Saad Aljlil",
+          "me": false
+        },
+        {
+          "name": "Ruhul A. Hazarika",
+          "me": false
+        }
+      ],
+      "venue": "Earth Systems and Environment",
+      "publisher": "Springer",
+      "year": "2025",
+      "metrics": [
+        "Impact Factor 5.0",
+        "Q1"
+      ],
+      "topics": [
+        "Deep Learning",
+        "Feature Fusion",
+        "Attention Mechanisms",
+        "Underwater Inspection"
+      ],
+      "presentation": null,
+      "highlights": [],
+      "venueShort": "Earth Systems and Environment",
+      "volume": "10",
+      "pages": "5383-5399",
+      "doi": "10.1007/s41748-025-00897-4",
+      "publisherUrl": "https://link.springer.com/article/10.1007/s41748-025-00897-4",
+      "pdfUrl": "https://link.springer.com/content/pdf/10.1007/s41748-025-00897-4.pdf",
+      "abstract": "Underwater infrastructures such as pipelines, ship hulls, and offshore platforms are critical to marine operations but are highly vulnerable to biofouling, structural corrosion, and vegetation overgrowth, leading to increased maintenance costs and environmental hazards. However, visual inspection of these structures remains challenging due to low visibility, uneven lighting, and complex textured surfaces that limit the effectiveness of both traditional and purely deep learning-based approaches. In this work, we introduce AquaFusionNet, a hybrid defect classification framework that seamlessly integrates embeddings from four state-of-the-art pre-trained backbones (EfficientNet-B0, ResNet-50, SENet-50, and Vision Transformer) with complementary traditional descriptors including colour histograms, histogram of oriented gradients (HOG), local binary patterns (LBP), edge density, and gradient statistics via a trainable attention module. This attention mechanism dynamically weights each feature channel, allowing the model to emphasise the most informative cues while preserving fine-scale details under variable turbidity and illumination. We evaluate AquaFusionNet on a curated dataset of 2,228 underwater images spanning three defect categories, with 445 images held out for testing. Our model achieves 98.43% accuracy, 98.18% precision, 97.79% recall, a 96.06% intersection-over-union, and a 97.97% F1-score, outperforming eleven strong baselines, including ResNet-152 and EfficientNet-B0, by a substantial margin. These results demonstrate AquaFusionNet's robustness and generalisability, paving the way for real-time, automated underwater inspection systems that can significantly enhance operational safety and reduce maintenance costs across marine industries.",
+      "keywords": [
+        "Underwater defect detection",
+        "Deep learning",
+        "Feature fusion",
+        "Attention mechanism",
+        "Pre-trained convolutional neural networks",
+        "Vision transformer",
+        "Automated inspection"
+      ],
+      "publishedVenue": "Earth Systems and Environment",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "optifog",
+      "ref": "J6",
+      "type": "journal",
+      "title": "OptiFog: A Framework for Acquiring State Information and Predicting Resource Availability for Task Offloading in Cooperative Fog-Networks",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Nurzaman Ahmed",
+          "me": false
+        },
+        {
+          "name": "Shyamal Ghosh",
+          "me": false
+        },
+        {
+          "name": "Rakesh Matam",
+          "me": false
+        },
+        {
+          "name": "Ferdous Ahmed Barbhuiya",
+          "me": false
+        }
+      ],
+      "venue": "IEEE Transactions on Services Computing",
+      "publisher": "IEEE",
+      "year": "2024",
+      "pages": "1-13",
+      "metrics": [
+        "Impact Factor 5.8",
+        "Q1"
+      ],
+      "topics": [
+        "Fog Computing",
+        "Task Offloading",
+        "CTMC",
+        "Resource Prediction"
+      ],
+      "presentation": {
+        "slug": "optifog",
+        "pdf": "Presentations/optifog1 (1).pdf",
+        "slides": 5
+      },
+      "highlights": [
+        "An optimized task offloading framework for time-sensitive computations.",
+        "Proposed a framework to determine the resource availability state of the fog network (global state of the system).",
+        "A fog node selection scheme to meet specific latency requirements of a task.",
+        "A continuous time Markov chain (CTMC)-based stochastic model to predict the resource availability status of a fog node.",
+        "A comparative analysis of the proposed OptiFog scheme with similar existing schemes in terms of latency, network cost, and percentage of tasks executed at the cloud.",
+        "This framework is for suitable fog node selection and to balance the load of the network."
+      ],
+      "venueShort": "IEEE Transactions on Services Computing",
+      "volume": "",
+      "doi": "10.1109/TSC.2024.3414371",
+      "publisherUrl": "https://ieeexplore.ieee.org/document/10556802/",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "IEEE Transactions on Services Computing",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "ieee80211ah-suitability",
+      "ref": "J7",
+      "type": "journal",
+      "title": "Analyzing the Suitability of IEEE 802.11ah for Next Generation Internet of Things: A Comparative Study",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Nurzaman Ahmed",
+          "me": false
+        },
+        {
+          "name": "Rakesh Matam",
+          "me": false
+        },
+        {
+          "name": "Ferdous Ahmed Barbhuiya",
+          "me": false
+        }
+      ],
+      "venue": "Ad Hoc Networks",
+      "publisher": "Elsevier",
+      "year": "2024",
+      "volume": "156",
+      "pages": "103437",
+      "metrics": [
+        "Impact Factor 5.4",
+        "Q1"
+      ],
+      "topics": [
+        "IEEE 802.11ah",
+        "Wi-Fi HaLow",
+        "Next Generation IoT",
+        "Wireless Networks"
+      ],
+      "presentation": {
+        "slug": "ieee80211ah-suitability",
+        "pdf": "Presentations/Halow1.pdf",
+        "slides": 5
+      },
+      "highlights": [
+        "Discussed the characteristics of communication technologies, different supported standards, and the essential requisite of an NGI architecture.",
+        "We compare the existing state-of-the-art communication standards.",
+        "Concerning the PHY and MAC layer features as provided by IEEE 802.11ah, this paper proposes an IEEE 802.11ah-based scalable NGI architecture.",
+        "An interfacing protocol between the layers is proposed to provide reliability by considering the optimal configuration parameters.",
+        "Compared to the other NGI architectures, this approach considers communication and connectivity solutions with recent features such as programmable, intelligence, and cognitive.",
+        "Open research issues, challenges, and future works of the proposed architecture are provided."
+      ],
+      "venueShort": "Ad Hoc Networks",
+      "doi": "10.1016/j.adhoc.2024.103437",
+      "publisherUrl": "https://www.sciencedirect.com/science/article/abs/pii/S1570870524000489",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "Ad Hoc Networks",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "redge-sdn-iiot",
+      "ref": "J8",
+      "type": "journal",
+      "title": "SDN-based Re-configurable Edge Network Architecture for Industrial Internet of Things",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Nurzaman Ahmed",
+          "me": false
+        },
+        {
+          "name": "Rakesh Matam",
+          "me": false
+        },
+        {
+          "name": "Mithun Mukherjee",
+          "me": false
+        },
+        {
+          "name": "Ferdous Ahmed Barbhuiya",
+          "me": false
+        }
+      ],
+      "venue": "IEEE Internet of Things Journal",
+      "publisher": "IEEE",
+      "year": "2023",
+      "volume": "10",
+      "pages": "16494-16503",
+      "metrics": [
+        "Impact Factor 8.2",
+        "Q1"
+      ],
+      "topics": [
+        "Software-Defined Networking",
+        "Edge Computing",
+        "Industrial IoT"
+      ],
+      "presentation": {
+        "slug": "redge-sdn-iiot",
+        "pdf": "Presentations/SDN1.pdf",
+        "slides": 5
+      },
+      "highlights": [
+        "REdge, a programmable edge network to reconfigure different services associated with industrial applications and networks.",
+        "Re-configuring tasks and their associated network settings with the aid of an SDN controller in edge networks.",
+        "Employs programmable layers at the edge for re-configuring the sensor/actuator network and applications.",
+        "An interfacing protocol between the layers is proposed to provide reliability by considering the optimal configuration parameters."
+      ],
+      "venueShort": "IEEE Internet of Things Journal",
+      "doi": "10.1109/JIOT.2023.3268375",
+      "publisherUrl": "https://ieeexplore.ieee.org/document/10105451/",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "IEEE Internet of Things Journal",
+      "linkVerified": true,
+      "note": "IEEE Xplore prints the title as “SDN-Based Reconfigurable Edge Network Architecture for Industrial Internet of Things”."
+    },
+    {
+      "id": "iod-80211ah",
+      "ref": "J9",
+      "type": "journal",
+      "title": "IEEE 802.11ah-Enabled Internet of Drone Architecture",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Nurzaman Ahmed",
+          "me": false
+        },
+        {
+          "name": "Rakesh Matam",
+          "me": false
+        },
+        {
+          "name": "Ferdous A. Barbhuiya",
+          "me": false
+        }
+      ],
+      "venue": "IEEE Internet of Things Magazine",
+      "publisher": "IEEE",
+      "year": "2022",
+      "volume": "5",
+      "pages": "174-178",
+      "metrics": [
+        "Impact Factor 5.8",
+        "Q1"
+      ],
+      "topics": [
+        "Internet of Drones",
+        "IEEE 802.11ah",
+        "UAV Communication"
+      ],
+      "presentation": {
+        "slug": "iod-80211ah",
+        "pdf": "Presentations/ieee802-1.pdf",
+        "slides": 5
+      },
+      "highlights": [
+        "A network architecture for the Internet of Drones to connect a large number of drones with multi-hop facilities.",
+        "An IEEE 802.11ah based IoD architecture for surveillance and remote control.",
+        "Predicts the location of a drone and places the required association and channel access configuration to a relay node dynamically."
+      ],
+      "venueShort": "IEEE Internet of Things Magazine",
+      "doi": "10.1109/IOTM.005.2100099",
+      "publisherUrl": "https://ieeexplore.ieee.org/document/9773126/",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "IEEE Internet of Things Magazine",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "iofog",
+      "ref": "C1",
+      "type": "conference",
+      "title": "ioFog: Prediction-based Fog Computing Architecture for Offline IoT",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Nurzaman Ahmed",
+          "me": false
+        },
+        {
+          "name": "Rakesh Matam",
+          "me": false
+        },
+        {
+          "name": "Ferdous Ahmed Barbhuiya",
+          "me": false
+        }
+      ],
+      "venue": "IEEE International Wireless Communications and Mobile Computing Conference (IWCMC)",
+      "venueShort": "IEEE IWCMC",
+      "publisher": "IEEE",
+      "year": "2021",
+      "pages": "1387-1392",
+      "topics": [
+        "Fog Computing",
+        "Markov Chain",
+        "Offline IoT"
+      ],
+      "presentation": {
+        "slug": "iofog",
+        "pdf": "Presentations/ioFog1.pdf",
+        "slides": 5
+      },
+      "highlights": [
+        "An offline fog architecture for achieving reliability and low latency in a large backbone network.",
+        "The solution uses a Markov chain-based task prediction model to offer dynamic service requirements with minimal dependency on the Internet.",
+        "Considers a central Fog Controller (FC) to (i) provide a global status overview and (ii) predict upcoming tasks of fog nodes for intelligent offloading decisions."
+      ],
+      "volume": "",
+      "metrics": [],
+      "doi": "10.1109/IWCMC51323.2021.9498796",
+      "publisherUrl": "https://ieeexplore.ieee.org/document/9498796/",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "2021 International Wireless Communications and Mobile Computing (IWCMC)",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "l3fog",
+      "ref": "C2",
+      "type": "conference",
+      "title": "L3Fog: Fog Node Selection and Task Offloading Framework for Mobile IoT",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Nurzaman Ahmed",
+          "me": false
+        },
+        {
+          "name": "Rakesh Matam",
+          "me": false
+        },
+        {
+          "name": "Ferdous Ahmed Barbhuiya",
+          "me": false
+        }
+      ],
+      "venue": "IEEE INFOCOM — IEEE Conference on Computer Communications Workshops (INFOCOM WKSHPS)",
+      "venueShort": "IEEE INFOCOM WKSHPS",
+      "publisher": "IEEE",
+      "year": "2022",
+      "pages": "1-6",
+      "topics": [
+        "Fog Computing",
+        "Task Offloading",
+        "Mobility",
+        "Linear Regression"
+      ],
+      "presentation": {
+        "slug": "l3fog",
+        "pdf": "Presentations/L3Fog1.pdf",
+        "slides": 5
+      },
+      "highlights": [
+        "A task offloading and migration scheme for mobile end users.",
+        "Prediction of end-users' location is performed using a linear regression based learning approach.",
+        "Target fog node selection is performed by mapping the fog nodes available near the predicted area, and the best fog node is chosen based on a utility function."
+      ],
+      "volume": "",
+      "metrics": [],
+      "doi": "10.1109/INFOCOMWKSHPS54753.2022.9798118",
+      "publisherUrl": "https://ieeexplore.ieee.org/document/9798118/",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "IEEE INFOCOM 2022 - IEEE Conference on Computer Communications Workshops (INFOCOM WKSHPS)",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "mobility-aware-offloading",
+      "ref": "C3",
+      "type": "conference",
+      "title": "Mobility-aware Task Offloading in Fog-Assisted Networks",
+      "authors": [
+        {
+          "name": "Sangeeta Kakati",
+          "me": false
+        },
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Rakesh Matam",
+          "me": false
+        },
+        {
+          "name": "Ferdous Ahmed Barbhuiya",
+          "me": false
+        },
+        {
+          "name": "Mithun Mukherjee",
+          "me": false
+        }
+      ],
+      "venue": "IEEE Global Communications Conference (GLOBECOM)",
+      "venueShort": "IEEE GLOBECOM",
+      "publisher": "IEEE",
+      "year": "2022",
+      "pages": "2897-2902",
+      "topics": [
+        "Fog Computing",
+        "Mobility",
+        "Task Migration"
+      ],
+      "presentation": {
+        "slug": "mobility-aware-offloading",
+        "pdf": "Presentations/Mobility1.pdf",
+        "slides": 5
+      },
+      "highlights": [
+        "A mobility-aware task offloading framework that reduces the necessity of task migration, as migration incurs additional cost such as network usage, latency and energy.",
+        "The proposed mechanism is simple, effective, and is not constrained by a device's location, thereby lowering the costs associated with mobility.",
+        "The proposed scheme entirely eliminates the cost induced during migration, since effective task offloading can lessen the necessity to attempt task migrations."
+      ],
+      "volume": "",
+      "metrics": [],
+      "doi": "10.1109/GLOBECOM48099.2022.10000851",
+      "publisherUrl": "https://ieeexplore.ieee.org/document/10000851/",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "GLOBECOM 2022 - 2022 IEEE Global Communications Conference",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "optfog",
+      "ref": "C4",
+      "type": "conference",
+      "title": "OptFog: Optimized Mobility-Aware Task Offloading and Migration Model for Fog Networks",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Rakesh Matam",
+          "me": false
+        },
+        {
+          "name": "Ferdous Ahmed Barbhuiya",
+          "me": false
+        }
+      ],
+      "venue": "IEEE International Conference on Advanced Networks and Telecommunications Systems (ANTS)",
+      "venueShort": "IEEE ANTS",
+      "publisher": "IEEE",
+      "year": "2023",
+      "pages": "539-544",
+      "topics": [
+        "Fog Computing",
+        "Machine Learning",
+        "Proactive Migration"
+      ],
+      "presentation": {
+        "slug": "optfog",
+        "pdf": "Presentations/OptFog1.pdf",
+        "slides": 5
+      },
+      "highlights": [
+        "Designing an offloading technique to handle mobility-aware end devices and communication range-limited fog nodes, achieving significant improvements in minimizing migration latency and overall network usage.",
+        "We proposed a migration assistance model named OptFog for fog-assisted networks that uses machine learning models to predict mobile device locations and make proactive migration decisions.",
+        "We evaluated three machine learning models — Decision Tree, Random Forest and k-NN — for this purpose.",
+        "We conducted a comparative analysis of OptFog and existing schemes in terms of the number of handoffs, number of migrations, overall network usage and migration latency."
+      ],
+      "volume": "",
+      "metrics": [],
+      "doi": "10.1109/ANTS59832.2023.10469215",
+      "publisherUrl": "https://ieeexplore.ieee.org/document/10469215/",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "2023 IEEE International Conference on Advanced Networks and Telecommunications Systems (ANTS)",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "redgex",
+      "ref": "C5",
+      "type": "conference",
+      "title": "RedgeX: Meta-learning based Optimal Analytical Model for Programmable Edge Intelligence",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Nurzaman Ahmed",
+          "me": false
+        },
+        {
+          "name": "Rakesh Matam",
+          "me": false
+        },
+        {
+          "name": "Ferdous Ahmed Barbhuiya",
+          "me": false
+        }
+      ],
+      "venue": "IEEE Wireless Communications and Networking Conference (WCNC)",
+      "venueShort": "IEEE WCNC",
+      "publisher": "IEEE",
+      "year": "2024",
+      "pages": "1-6",
+      "topics": [
+        "Edge Intelligence",
+        "Meta-Learning",
+        "Programmable Networks"
+      ],
+      "presentation": {
+        "slug": "redgex",
+        "pdf": "Presentations/Redgex1.pdf",
+        "slides": 5
+      },
+      "highlights": [
+        "We introduce a meta-learning based analytical model generation technique for edge devices. The approach makes informed decisions by considering the states and resource availability of edge devices, optimizes the selection of code snippets, generates an analytical module from them, and remotely deploys it to the target edge device.",
+        "We introduce a global-status driven model for edge computing and intelligence, employing an edge controller that regularly gathers status updates from edge devices to maintain a current and comprehensive overview of resource availability across the network's nodes."
+      ],
+      "volume": "",
+      "metrics": [],
+      "doi": "10.1109/WCNC57260.2024.10570981",
+      "publisherUrl": "https://ieeexplore.ieee.org/document/10570981/",
+      "pdfUrl": "",
+      "abstract": "In this paper, we propose RedgeX, a meta-learning based approach for generating analytical models in a distributed edge intelligence network. The approach involves training a meta-learning model on a large dataset of edge device information and performance metrics to predict the optimal analytical model for a given task and available resources. An edge controller, which has the status of all the edge devices, can then deploy the optimal model to the most suitable edge devices based on their available resources. The RedgeX improves the efficiency and effectiveness of edge intelligence systems by dynamically generating analytical models based on the specific requirements of each task and the available resources in the edge devices. The performance evaluation of the proposed scheme shows better utilization of resources, improved performance, and reduced latency in edge intelligence systems.",
+      "keywords": [
+        "Edge computing",
+        "Internet of Things",
+        "meta-learning",
+        "programmable edge computing",
+        "Industrial Internet of Things",
+        "Metalearning",
+        "Performance evaluation",
+        "Training",
+        "Analytical models",
+        "Codes",
+        "Smart homes",
+        "Predictive models"
+      ],
+      "publishedVenue": "2024 IEEE Wireless Communications and Networking Conference (WCNC)",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "edge-mi",
+      "ref": "C6",
+      "type": "conference",
+      "title": "Edge-Mi: Edge-based Microservices for Mobility-aware Task Migration Scheme",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Rakesh Matam",
+          "me": false
+        },
+        {
+          "name": "Ferdous Ahmed Barbhuiya",
+          "me": false
+        }
+      ],
+      "venue": "IEEE Future Networks World Forum (FNWF)",
+      "venueShort": "IEEE FNWF",
+      "publisher": "IEEE",
+      "year": "2024",
+      "topics": [
+        "Edge Computing",
+        "Microservices",
+        "Task Migration"
+      ],
+      "presentation": {
+        "slug": "edge-mi",
+        "pdf": "Presentations/edgeMi1.pdf",
+        "slides": 5
+      },
+      "highlights": [],
+      "volume": "",
+      "pages": "405-410",
+      "metrics": [],
+      "doi": "10.1109/FNWF63303.2024.11028853",
+      "publisherUrl": "https://ieeexplore.ieee.org/document/11028853/",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "2024 IEEE Future Networks World Forum (FNWF)",
+      "linkVerified": true,
+      "note": ""
+    },
+    {
+      "id": "driver-drowsiness-llm",
+      "ref": "C7",
+      "type": "conference",
+      "title": "Leveraging LLMs and Deep Learning for Driver Drowsiness Image Categorization",
+      "authors": [
+        {
+          "name": "Nasim Ahmed",
+          "me": false
+        },
+        {
+          "name": "Baharul Islam",
+          "me": false
+        },
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Sudipta Majumder",
+          "me": false
+        }
+      ],
+      "venue": "IEEE Guwahati Subsection Conference (GCON)",
+      "venueShort": "IEEE GCON",
+      "publisher": "IEEE",
+      "year": "2025",
+      "pages": "1-6",
+      "topics": [
+        "Deep Learning",
+        "Driver Safety",
+        "Image Classification"
+      ],
+      "presentation": null,
+      "highlights": [],
+      "volume": "",
+      "metrics": [],
+      "doi": "10.1109/GCON65540.2025.11173333",
+      "publisherUrl": "https://ieeexplore.ieee.org/document/11173333/",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "2025 IEEE Guwahati Subsection Conference (GCON)",
+      "linkVerified": true,
+      "note": "IEEE Xplore lists this paper under the title “Leveraging Vision Transformer-MLP Framework for High-Precision Driver Drowsiness Image Categorization” (same authors, same venue, DOI 10.1109/GCON65540.2025.11173333)."
+    },
+    {
+      "id": "id-ss-short-signature",
+      "ref": "O1",
+      "type": "other",
+      "title": "ID-SS: A New Identity-Based Short Signature Scheme",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Subhas Chandra Sahana",
+          "me": false
+        }
+      ],
+      "venue": "Early research work — identity-based cryptography",
+      "venueShort": "Early research work",
+      "publisher": "",
+      "year": "2018",
+      "topics": [
+        "Cryptography",
+        "Digital Signatures",
+        "Bilinear Pairing"
+      ],
+      "presentation": null,
+      "highlights": [
+        "Proposed ID-SS, a short signature scheme based on identity-based cryptography.",
+        "Based on the assumption that the Computational Diffie-Hellman Problem (CDHP) is an ungovernable problem, the proposed scheme was found to be secure.",
+        "Implementation and comparison of the proposed scheme with most related research achieved satisfactory results."
+      ],
+      "volume": "",
+      "pages": "",
+      "metrics": [],
+      "doi": "",
+      "publisherUrl": "",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "",
+      "linkVerified": false,
+      "note": "No record for this work was found on any publisher or DOI platform; it is listed here as early research work rather than as a formally indexed publication."
+    },
+    {
+      "id": "key-escrow-multisignature",
+      "ref": "O2",
+      "type": "other",
+      "title": "Analysis of a Key-Escrow Free Multi-Signature Scheme",
+      "authors": [
+        {
+          "name": "Mehbub Alam",
+          "me": true
+        },
+        {
+          "name": "Subhas Chandra Sahana",
+          "me": false
+        }
+      ],
+      "venue": "Early research work — cryptanalysis of multi-signature schemes",
+      "venueShort": "Early research work",
+      "publisher": "",
+      "year": "2017",
+      "topics": [
+        "Cryptography",
+        "Multi-Signature",
+        "Cryptanalysis"
+      ],
+      "presentation": null,
+      "highlights": [
+        "Analyzed an existing key-escrow free multi-signature scheme formulated from bilinear pairings and the blinding-binding technique.",
+        "Found that the sequential multi-signature scheme proposed by the authors does not follow the characteristics of an ideal sequential multi-signature scheme, leading to inefficiency.",
+        "Moreover, the existing parallel multi-signature scheme is not verifiable.",
+        "We modified both schemes and designed an efficient new sequential multi-signature scheme and a parallel multi-signature scheme."
+      ],
+      "volume": "",
+      "pages": "",
+      "metrics": [],
+      "doi": "",
+      "publisherUrl": "",
+      "pdfUrl": "",
+      "abstract": "",
+      "keywords": [],
+      "publishedVenue": "",
+      "linkVerified": false,
+      "note": "No record for this work was found on any publisher or DOI platform; it is listed here as early research work rather than as a formally indexed publication."
+    }
+  ]
+}

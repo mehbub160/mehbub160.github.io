@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExamPortal – Exam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:   #0D1B2A;
+      --navy2:  #1B2E45;
+      --blue:   #2563EB;
+      --blue-lt:#3B82F6;
+      --sky:    #EFF6FF;
+      --success:#059669;
+      --danger: #DC2626;
+      --warning:#D97706;
+      --review: #7C3AED;
+      --orange: #EA580C;
+      --text:   #0F172A;
+      --muted:  #64748B;
+      --border: #E2E8F0;
+      --card:   #FFFFFF;
+      --bg:     #F0F5FF;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text);
+           min-height:100vh; user-select:none; -webkit-user-select:none; }
+
+    /* ── TOP HEADER ── */
+    .exam-header {
+      background:var(--navy); height:60px;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 1.5rem; position:sticky; top:0; z-index:100; gap:0.75rem;
+    }
+    .exam-title-bar {
+      font-family:'Outfit',sans-serif; font-weight:700; color:#fff;
+      font-size:1rem; display:flex; align-items:center; gap:0.5rem; flex:1; min-width:0;
+    }
+    .exam-title-bar small { color:rgba(255,255,255,0.5); font-size:0.78rem; font-weight:400; }
+
+    /* ── WARNING BADGE (tab-switch warnings) ── */
+    .warning-badge {
+      display:flex; align-items:center; gap:0.5rem;
+      background:rgba(220,38,38,0.15); border:1px solid rgba(220,38,38,0.4);
+      border-radius:8px; padding:0.4rem 0.85rem;
+      font-family:'Outfit',sans-serif; font-size:0.8rem; font-weight:700;
+      color:#FCA5A5; white-space:nowrap; transition:all 0.3s;
+    }
+    .warning-badge.pulse { animation:warnPulse 0.6s ease; }
+    @keyframes warnPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08); background:rgba(220,38,38,0.35);} }
+    .warning-dots { display:flex; gap:3px; }
+    .warning-dot {
+      width:8px; height:8px; border-radius:50%;
+      background:rgba(255,255,255,0.2); transition:background 0.3s;
+    }
+    .warning-dot.active { background:#F87171; }
+
+    /* ── COUNTDOWN OVERLAY ── */
+    #countdown-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(10, 10, 20, 0.92);
+      backdrop-filter: blur(6px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 1.5rem; animation: overlayIn 0.25s ease;
+    }
+    #countdown-overlay.active { display: flex; }
+    @keyframes overlayIn {
+      from { opacity: 0; transform: scale(1.03); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .cd-icon { font-size: 3.5rem; animation: iconBounce 0.6s ease; }
+    @keyframes iconBounce {
+      0%   { transform: scale(0.5); opacity: 0; }
+      70%  { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .cd-title {
+      font-family: 'Outfit', sans-serif; font-size: 1.6rem; font-weight: 800;
+      color: #FECACA; text-align: center; line-height: 1.3;
+    }
+    .cd-sub {
+      font-size: 0.95rem; color: rgba(255,255,255,0.6);
+      text-align: center; max-width: 360px; line-height: 1.6;
+    }
+
+    /* Circular countdown ring */
+    .cd-ring-wrap {
+      position: relative; width: 130px; height: 130px;
+    }
+    .cd-svg { transform: rotate(-90deg); }
+    .cd-track {
+      fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 10;
+    }
+    .cd-fill {
+      fill: none; stroke: #F87171; stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 345;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.4s;
+    }
+    .cd-fill.urgent { stroke: #EF4444; }
+    .cd-fill.critical { stroke: #DC2626; }
+    .cd-number {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Outfit', sans-serif; font-size: 3rem; font-weight: 800;
+      color: #fff;
+    }
+    .cd-number.pulse-num { animation: numPulse 0.4s ease; }
+    @keyframes numPulse {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.25); color: #F87171; }
+      100% { transform: scale(1); }
+    }
+
+    .cd-warning-info {
+      display: flex; gap: 1.2rem; margin-top: 0.5rem;
+    }
+    .cd-pill {
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px; padding: 0.35rem 0.9rem;
+      font-size: 0.8rem; color: rgba(255,255,255,0.7);
+      font-family: 'Outfit', sans-serif; font-weight: 600;
+    }
+    .cd-pill.danger-pill {
+      background: rgba(220,38,38,0.2); border-color: rgba(220,38,38,0.4);
+      color: #FCA5A5;
+    }
+
+    .cd-btn-return {
+      margin-top: 0.5rem;
+      padding: 0.85rem 2.5rem;
+      background: linear-gradient(135deg, #16A34A, #15803D);
+      color: #fff; border: none; border-radius: 12px;
+      font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 20px rgba(22,163,74,0.4);
+    }
+    .cd-btn-return:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 26px rgba(22,163,74,0.55);
+    }
+    .cd-btn-return:active { transform: translateY(0); }
+
+    /* ── TIMER ── */
+    .timer-box {
+      display:flex; align-items:center; gap:0.6rem;
+      background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12);
+      border-radius:10px; padding:0.5rem 1rem;
+    }
+    .timer-icon { font-size:1.1rem; }
+    .timer-display {
+      font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:700;
+      color:#fff; letter-spacing:0.05em; min-width:70px;
+    }
+    .timer-display.warning { color:#FCD34D; }
+    .timer-display.danger  { color:#F87171; animation:pulse 1s infinite; }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    .btn-submit-header {
+      padding:0.5rem 1.1rem; background:var(--danger); color:#fff;
+      border:none; border-radius:8px;
+      font-family:'Outfit',sans-serif; font-size:0.88rem; font-weight:600;
+      cursor:pointer; transition:background 0.2s; white-space:nowrap;
+    }
+    .btn-submit-header:hover { background:#B91C1C; }
+
+    /* ── MAIN EXAM LAYOUT ── */
+    .exam-body {
+      display:grid; grid-template-columns:1fr 280px;
+      gap:1.25rem; max-width:1100px; margin:1.5rem auto; padding:0 1.5rem;
+    }
+
+    /* ── QUESTION PANEL ── */
+    .question-panel {
+      background:var(--card); border-radius:14px;
+      border:1px solid var(--border); overflow:hidden;
+    }
+    .q-header {
+      background:#F8FAFC; border-bottom:1px solid var(--border);
+      padding:1rem 1.5rem;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .q-number {
+      font-family:'Outfit',sans-serif; font-size:0.85rem; font-weight:700;
+      color:var(--muted); text-transform:uppercase; letter-spacing:0.05em;
+    }
+    .q-type-badge {
+      font-size:0.72rem; font-weight:700; border-radius:5px;
+      padding:0.2rem 0.55rem; text-transform:uppercase; letter-spacing:0.04em;
+    }
+    .q-type-badge.MCQ   { background:#EFF6FF; color:#1D4ED8; }
+    .q-type-badge.FILL  { background:#ECFDF5; color:#065F46; }
+    .q-type-badge.SHORT { background:#FFF7ED; color:#9A3412; }
+    .q-marks {
+      font-size:0.78rem; color:var(--muted);
+      background:#EFF6FF; border-radius:6px; padding:0.25rem 0.6rem;
+    }
+    .q-body { padding:1.75rem 1.5rem; }
+    .q-text {
+      font-size:1.05rem; line-height:1.7; color:var(--text);
+      font-weight:500; margin-bottom:1.75rem;
+    }
+
+    /* ── MCQ OPTIONS ── */
+    .options { display:flex; flex-direction:column; gap:0.75rem; }
+    .option-label {
+      display:flex; align-items:center; gap:1rem;
+      padding:0.85rem 1.1rem;
+      border:1.5px solid var(--border); border-radius:10px;
+      cursor:pointer; transition:all 0.18s; position:relative;
+    }
+    .option-label:hover { border-color:var(--blue-lt); background:#F5F8FF; }
+    .option-label input[type="radio"] { display:none; }
+    .option-label.selected { border-color:var(--blue); background:var(--sky); }
+    .opt-key {
+      width:32px; height:32px; border-radius:8px;
+      background:#F1F5F9; display:flex; align-items:center; justify-content:center;
+      font-family:'Outfit',sans-serif; font-weight:700; font-size:0.85rem;
+      color:var(--muted); flex-shrink:0; transition:all 0.18s;
+    }
+    .option-label.selected .opt-key { background:var(--blue); color:#fff; }
+    .opt-text { font-size:0.95rem; line-height:1.4; }
+
+    /* ── FILL IN THE BLANK INPUT ── */
+    .fill-input-wrap { position:relative; }
+    .fill-hint {
+      font-size:0.82rem; color:var(--muted); margin-bottom:0.65rem;
+      display:flex; align-items:center; gap:0.4rem;
+    }
+    .fill-input {
+      width:100%; padding:0.9rem 1.1rem;
+      border:2px solid var(--border); border-radius:10px;
+      font-family:'DM Sans',sans-serif; font-size:1rem; color:var(--text);
+      background:#fff; outline:none; transition:border-color 0.18s;
+      user-select:text; -webkit-user-select:text;
+    }
+    .fill-input:focus { border-color:var(--success); }
+    .fill-input.has-value { border-color:var(--success); background:#F0FDF4; }
+    .fill-char-count {
+      font-size:0.75rem; color:var(--muted); text-align:right; margin-top:0.35rem;
+    }
+
+    /* ── SHORT ANSWER TEXTAREA ── */
+    .short-hint {
+      font-size:0.82rem; color:var(--muted); margin-bottom:0.65rem;
+      display:flex; align-items:center; gap:0.4rem;
+      padding:0.65rem 0.9rem; background:#FFF7ED; border-radius:8px;
+      border-left:3px solid var(--orange);
+    }
+    .short-textarea {
+      width:100%; min-height:160px; padding:1rem 1.1rem;
+      border:2px solid var(--border); border-radius:10px;
+      font-family:'DM Sans',sans-serif; font-size:0.95rem;
+      color:var(--text); background:#fff; outline:none;
+      transition:border-color 0.18s; resize:vertical;
+      line-height:1.6;
+      user-select:text; -webkit-user-select:text;
+    }
+    .short-textarea:focus { border-color:var(--orange); }
+    .short-textarea.has-value { border-color:var(--orange); background:#FFFBEB; }
+    .short-word-count {
+      font-size:0.75rem; color:var(--muted); text-align:right; margin-top:0.35rem;
+    }
+    .pending-badge {
+      display:inline-flex; align-items:center; gap:0.35rem;
+      background:#FFF7ED; border:1px solid #FED7AA;
+      color:var(--orange); border-radius:6px;
+      font-size:0.72rem; font-weight:700; padding:0.2rem 0.55rem;
+      margin-bottom:0.75rem;
+    }
+
+    /* ── NAVIGATION BUTTONS ── */
+    .q-footer {
+      padding:1.25rem 1.5rem; border-top:1px solid var(--border);
+      display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center;
+    }
+    .btn-nav {
+      padding:0.65rem 1.3rem; border-radius:9px;
+      font-family:'Outfit',sans-serif; font-size:0.88rem; font-weight:600;
+      cursor:pointer; transition:all 0.18s; display:inline-flex; align-items:center; gap:0.4rem;
+      border:1.5px solid transparent;
+    }
+    .btn-prev { background:#F1F5F9; color:var(--text); border-color:var(--border); }
+    .btn-prev:hover { background:#E2E8F0; }
+    .btn-next { background:var(--blue); color:#fff; }
+    .btn-next:hover { background:#1D4ED8; }
+    .btn-review {
+      background:#F5F3FF; color:var(--review);
+      border-color:#DDD6FE;
+      margin-left:auto;
+    }
+    .btn-review:hover { background:#EDE9FE; }
+    .btn-clear { background:#FEF2F2; color:var(--danger); border-color:#FECACA; }
+    .btn-clear:hover { background:#FEE2E2; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { display:flex; flex-direction:column; gap:1.25rem; }
+    .palette-card {
+      background:var(--card); border-radius:14px; border:1px solid var(--border);
+      overflow:hidden;
+    }
+    .palette-header {
+      background:#F8FAFC; border-bottom:1px solid var(--border);
+      padding:0.85rem 1rem;
+      font-family:'Outfit',sans-serif; font-size:0.85rem; font-weight:700;
+      color:var(--text); text-transform:uppercase; letter-spacing:0.04em;
+    }
+    .palette-grid {
+      padding:1rem; display:flex; flex-wrap:wrap; gap:0.5rem;
+    }
+    .q-bubble {
+      width:36px; height:36px; border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Outfit',sans-serif; font-size:0.78rem; font-weight:700;
+      cursor:pointer; transition:all 0.18s; border:2px solid transparent;
+    }
+    .q-bubble.not-visited  { background:#F1F5F9; color:var(--muted); }
+    .q-bubble.answered     { background:#ECFDF5; color:var(--success); border-color:#A7F3D0; }
+    .q-bubble.not-answered { background:#FEF2F2; color:var(--danger);  border-color:#FECACA; }
+    .q-bubble.review       { background:#F5F3FF; color:var(--review);  border-color:#DDD6FE; }
+    .q-bubble.current      { border-color:var(--blue) !important; box-shadow:0 0 0 3px rgba(37,99,235,0.2); }
+    .q-bubble:hover { transform:scale(1.1); }
+    /* Small type indicators on palette bubbles */
+    .q-bubble[data-type="FILL"]  { border-style:dashed; }
+    .q-bubble[data-type="SHORT"] { border-style:dotted; border-width:2px; }
+    .q-bubble[data-type="SHORT"].not-visited  { border-color:rgba(234,88,12,0.4); }
+
+    .legend { display:flex; flex-wrap:wrap; gap:0.5rem; padding:0.75rem 1rem; border-top:1px solid var(--border); }
+    .legend-item {
+      display:flex; align-items:center; gap:0.35rem;
+      font-size:0.72rem; color:var(--muted);
+    }
+    .legend-dot { width:12px; height:12px; border-radius:3px; }
+
+    /* ── Q-TYPE LEGEND ── */
+    .type-legend {
+      padding:0.6rem 1rem; border-top:1px solid var(--border);
+      display:flex; flex-direction:column; gap:0.4rem;
+    }
+    .type-legend-item {
+      display:flex; align-items:center; gap:0.5rem;
+      font-size:0.72rem; color:var(--muted);
+    }
+    .type-indicator {
+      width:24px; height:12px; border-radius:3px;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.6);
+      display:flex; align-items:center; justify-content:center;
+      z-index:9999; opacity:0; pointer-events:none; transition:opacity 0.2s;
+    }
+    .modal-overlay.show { opacity:1; pointer-events:all; }
+    .modal-box {
+      background:#fff; border-radius:16px; padding:2rem;
+      max-width:420px; width:90%; text-align:center;
+      transform:scale(0.95); transition:transform 0.2s;
+      box-shadow:0 20px 60px rgba(0,0,0,0.25);
+    }
+    .modal-overlay.show .modal-box { transform:scale(1); }
+    .modal-icon { font-size:3rem; margin-bottom:1rem; }
+    .modal-title {
+      font-family:'Outfit',sans-serif; font-size:1.3rem; font-weight:700;
+      color:var(--text); margin-bottom:0.5rem;
+    }
+    .modal-msg { font-size:0.9rem; color:var(--muted); margin-bottom:1.5rem; line-height:1.6; }
+    .modal-btns { display:flex; gap:0.75rem; justify-content:center; }
+    .modal-btn {
+      padding:0.65rem 1.5rem; border-radius:9px; border:none;
+      font-family:'Outfit',sans-serif; font-weight:600; font-size:0.9rem;
+      cursor:pointer; transition:all 0.2s;
+    }
+    .modal-btn-confirm { background:var(--danger); color:#fff; }
+    .modal-btn-confirm:hover { background:#B91C1C; }
+    .modal-btn-warning { background:var(--warning); color:#fff; }
+    .modal-btn-warning:hover { background:#B45309; }
+    .modal-btn-cancel { background:#F1F5F9; color:var(--text); }
+    .modal-btn-cancel:hover { background:#E2E8F0; }
+
+    /* Warning count pills in modal */
+    .warning-pills { display:flex; justify-content:center; gap:6px; margin:0.75rem 0; }
+    .warning-pill {
+      width:14px; height:14px; border-radius:50%;
+      background:#FECACA; transition:background 0.3s;
+    }
+    .warning-pill.used { background:var(--danger); }
+
+    @media(max-width:768px){
+      .exam-body { grid-template-columns:1fr; }
+      .sidebar { order:-1; }
+      .palette-grid { max-height:120px; overflow-y:auto; }
+      .exam-title-bar small { display:none; }
+    }
+
+    /* ── QUESTION IMAGE ── */
+    .q-image-wrap {
+      margin: 0 0 1rem 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+      background: #F8FAFC;
+      text-align: center;
+      cursor: zoom-in;
+      transition: box-shadow 0.18s;
+    }
+    .q-image-wrap:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+    .q-image-wrap img {
+      max-width: 100%; max-height: 280px;
+      display: block; margin: 0 auto;
+      object-fit: contain; padding: 0.5rem;
+    }
+    .q-image-caption {
+      font-size: 0.72rem; color: var(--muted);
+      padding: 0.3rem 0.75rem 0.5rem;
+      border-top: 1px solid var(--border);
+      background: #F1F5F9;
+    }
+
+    /* Exam lightbox */
+    #exam-img-lightbox {
+      display: none; position: fixed; inset: 0; z-index: 99999;
+      background: rgba(0,0,0,0.88);
+      align-items: center; justify-content: center;
+      cursor: zoom-out;
+    }
+    #exam-img-lightbox.open { display: flex; }
+    #exam-img-lightbox img {
+      max-width: 92vw; max-height: 90vh;
+      border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      object-fit: contain;
+    }
+    #exam-img-lightbox .elb-close {
+      position: absolute; top: 1rem; right: 1.5rem;
+      background: rgba(255,255,255,0.12); border: none;
+      color: #fff; font-size: 1.4rem; cursor: pointer;
+      border-radius: 50%; width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #exam-img-lightbox .elb-close:hover { background: rgba(255,255,255,0.25); }
+  </style>
+</head>
+<body>
+
+<!-- ── EXAM HEADER ─────────────────────────────── -->
+<div class="exam-header">
+  <div class="exam-title-bar">
+    📋 <span id="exam-name">Loading…</span>
+    <small id="exam-subject"></small>
+  </div>
+
+  <!-- WARNING COUNTER (tab-switch) -->
+  <div class="warning-badge" id="warning-badge">
+    <span>⚠</span>
+    <div class="warning-dots">
+      <div class="warning-dot" id="wd-1"></div>
+      <div class="warning-dot" id="wd-2"></div>
+      <div class="warning-dot" id="wd-3"></div>
+    </div>
+    <span id="warning-text">0/3 warnings</span>
+  </div>
+
+  <div class="timer-box">
+    <span class="timer-icon">⏱</span>
+    <div class="timer-display" id="timer">00:00</div>
+  </div>
+  <button class="btn-submit-header" onclick="confirmSubmit()">Submit Exam</button>
+</div>
+
+<!-- ── MAIN BODY ───────────────────────────────── -->
+<div class="exam-body">
+
+  <!-- QUESTION PANEL -->
+  <div class="question-panel">
+    <div class="q-header">
+      <div class="q-number">Question <span id="q-num">1</span> of <span id="q-total">0</span></div>
+      <div style="display:flex;align-items:center;gap:0.6rem">
+        <span class="q-type-badge" id="q-type-badge">MCQ</span>
+        <span class="q-marks" id="q-marks">+4 / −1</span>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-text" id="q-text">Loading question…</div>
+      <div id="options-container"></div>
+    </div>
+    <div class="q-footer">
+      <button class="btn-nav btn-prev" onclick="navigate(-1)">← Prev</button>
+      <button class="btn-nav btn-next" onclick="navigate(1)">Next →</button>
+      <button class="btn-nav btn-clear" onclick="clearAnswer()">✕ Clear</button>
+      <button class="btn-nav btn-review" onclick="markForReview()">🔖 Review</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <!-- Question Palette -->
+    <div class="palette-card">
+      <div class="palette-header">Question Palette</div>
+      <div class="palette-grid" id="palette-grid"></div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#ECFDF5;border:1.5px solid #A7F3D0"></div> Answered</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#FEF2F2;border:1.5px solid #FECACA"></div> Not Answered</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#F5F3FF;border:1.5px solid #DDD6FE"></div> Review</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#F1F5F9"></div> Not Visited</div>
+      </div>
+      <div class="type-legend">
+        <div class="legend-item" style="font-size:0.7rem;font-weight:600;color:var(--text)">Question types:</div>
+        <div class="type-legend-item">
+          <div class="type-indicator" style="background:#EFF6FF;border:2px solid #93C5FD"></div> MCQ (solid border)
+        </div>
+        <div class="type-legend-item">
+          <div class="type-indicator" style="background:#ECFDF5;border:2px dashed #6EE7B7"></div> Fill in the Blank
+        </div>
+        <div class="type-legend-item">
+          <div class="type-indicator" style="background:#FFF7ED;border:2px dotted #FCA5A5"></div> Short Answer
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Summary -->
+    <div class="palette-card">
+      <div class="palette-header">Progress</div>
+      <div style="padding:1rem;display:flex;flex-direction:column;gap:0.6rem">
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+          <span>Answered</span>
+          <strong id="prog-answered" style="color:var(--success)">0</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+          <span>Not Answered</span>
+          <strong id="prog-unanswered" style="color:var(--danger)">0</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+          <span>Marked for Review</span>
+          <strong id="prog-review" style="color:var(--review)">0</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+          <span>Not Visited</span>
+          <strong id="prog-notvisited">0</strong>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:0.25rem 0"/>
+        <div style="display:flex;justify-content:space-between;font-size:0.78rem">
+          <span style="color:var(--orange)">📝 Pending Evaluation</span>
+          <strong id="prog-pending" style="color:var(--orange)">0</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODALS ─────────────────────────────────── -->
+<!-- Submit confirmation -->
+<div class="modal-overlay" id="modal-submit">
+  <div class="modal-box">
+    <div class="modal-icon">📤</div>
+    <div class="modal-title">Submit Exam?</div>
+    <div class="modal-msg" id="modal-submit-msg">
+      Are you sure you want to submit?
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-btn-cancel"  onclick="closeModal('modal-submit')">Cancel</button>
+      <button class="modal-btn modal-btn-confirm" onclick="submitExam('manual')">Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tab-switch WARNING (1st & 2nd occurrence) -->
+<!-- ══ 10-SECOND COUNTDOWN OVERLAY ══ -->
+<div id="countdown-overlay" role="alertdialog" aria-live="assertive">
+  <div class="cd-icon">🚨</div>
+  <div class="cd-title">You left the exam window!</div>
+
+  <div class="cd-ring-wrap">
+    <svg class="cd-svg" width="130" height="130" viewBox="0 0 130 130">
+      <circle class="cd-track" cx="65" cy="65" r="55"/>
+      <circle class="cd-fill" id="cd-ring" cx="65" cy="65" r="55"/>
+    </svg>
+    <div class="cd-number" id="cd-number">10</div>
+  </div>
+
+  <div class="cd-sub">
+    Return to the exam within <strong style="color:#FECACA">10 seconds</strong>
+    or your exam will be <strong style="color:#F87171">automatically submitted</strong>.
+  </div>
+
+  <div class="cd-warning-info">
+    <div class="cd-pill" id="cd-warn-pill">⚠️ Warning <span id="cd-warn-num">1</span>/3</div>
+    <div class="cd-pill danger-pill" id="cd-auto-pill">Auto-submit in <span id="cd-pill-secs">10</span>s</div>
+  </div>
+
+  <button class="cd-btn-return" onclick="cancelCountdown()">
+    ✅ I'm Back — Continue Exam
+  </button>
+</div>
+
+<div class="modal-overlay" id="modal-warning">
+  <div class="modal-box">
+    <div class="modal-icon">⚠️</div>
+    <div class="modal-title" id="warn-modal-title">Tab Switch Detected!</div>
+    <div class="warning-pills">
+      <div class="warning-pill" id="wp-1"></div>
+      <div class="warning-pill" id="wp-2"></div>
+      <div class="warning-pill" id="wp-3"></div>
+    </div>
+    <div class="modal-msg" id="warn-modal-msg">
+      Please stay on this page.
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-btn-warning" onclick="closeModal('modal-warning')">I Understand – Continue Exam</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tab-switch AUTO-SUBMIT (3rd occurrence) -->
+<div class="modal-overlay" id="modal-cheat">
+  <div class="modal-box">
+    <div class="modal-icon">🚫</div>
+    <div class="modal-title">Exam Auto-Submitted</div>
+    <div class="modal-msg">
+      You received <strong style="color:var(--danger)">3 warnings</strong> for switching tabs.<br/>
+      Your exam has been <strong>automatically submitted</strong>.
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn modal-btn-confirm" onclick="goToResult()">View Result</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  // ════════════════════════════════════════════════════
+  //  EXAM ENGINE
+  // ════════════════════════════════════════════════════
+
+  const user   = requireAuth("student");
+  const examId = sessionStorage.getItem("ep_current_exam");
+
+  if (!user || !examId) { window.location.href = "dashboard.html"; }
+
+  if (hasAttempted(user.userId, examId)) {
+    alert("You have already attempted this exam.");
+    window.location.href = "dashboard.html";
+  }
+
+  const exam = getExam(examId);
+  if (!exam) { alert("Exam not found."); window.location.href = "dashboard.html"; }
+
+  // ── State ──
+  let currentQ      = 0;
+  let answers       = {};   // MCQ: integer index | FILL/SHORT: string
+  let statuses      = {};   // not_visited | not_answered | answered | review
+  let timerSecs     = exam.duration * 60;
+  let timerInterval;
+  let submitted     = false;
+
+  // Init statuses & answers per question type
+  exam.questions.forEach(q => {
+    statuses[q.id] = "not_visited";
+    const type = q.type || "MCQ";
+    answers[q.id] = (type === "MCQ") ? -1 : "";
+  });
+
+  document.getElementById("exam-name").textContent    = exam.title;
+  document.getElementById("exam-subject").textContent = `— ${exam.subject}`;
+  document.getElementById("q-total").textContent      = exam.questions.length;
+
+  // ════════════════════════════════════════════════════
+  //  PROCTORING — 3-WARNING + 10-SECOND COUNTDOWN
+  // ════════════════════════════════════════════════════
+
+  const WARNING_KEY  = `ep_warnings_${examId}_${user.userId}`;
+  const MAX_WARNINGS = 3;
+  const COUNTDOWN_SECS = 10;
+  const RING_FULL = 345; // circumference of r=55 circle (2πr ≈ 345)
+
+  // Restore warning count across refresh
+  let warningCount = parseInt(localStorage.getItem(WARNING_KEY) || "0");
+  updateWarningUI();
+
+  let lastWarningTime = 0;    // debounce: prevents blur + visibilitychange double-fire
+  let countdownTimer  = null; // setInterval handle
+  let countdownSecs   = COUNTDOWN_SECS;
+  let countdownActive = false;
+
+  // ── Main entry: called on every tab-switch / window-blur ──────────
+  function handleTabSwitch() {
+    if (submitted) return;
+    const now = Date.now();
+    if (now - lastWarningTime < 1500) return;  // 1.5s debounce
+    lastWarningTime = now;
+
+    warningCount++;
+    localStorage.setItem(WARNING_KEY, warningCount);
+    updateWarningUI();
+
+    if (warningCount >= MAX_WARNINGS) {
+      // 3rd offence → immediate submit (existing behaviour preserved)
+      stopCountdown();
+      submitExam("tab_switch");
+      closeModal("modal-warning");
+      showModal("modal-cheat");
+    } else {
+      // Start the 10-second countdown
+      startCountdown();
+    }
+  }
+
+  // ── Start the 10-second countdown overlay ─────────────────────────
+  function startCountdown() {
+    if (countdownActive) return;   // already running, don't restart
+    countdownActive = true;
+    countdownSecs   = COUNTDOWN_SECS;
+
+    // Sync warning pill label inside overlay
+    const warnNum = document.getElementById("cd-warn-num");
+    if (warnNum) warnNum.textContent = warningCount;
+
+    showCountdownOverlay(countdownSecs);
+
+    countdownTimer = setInterval(() => {
+      countdownSecs--;
+
+      // Update ring and number
+      showCountdownOverlay(countdownSecs);
+
+      if (countdownSecs <= 0) {
+        stopCountdown();
+        submitExam("tab_switch_timeout");
+        showModal("modal-cheat");
+        // Update cheat modal text to reflect timeout reason
+        const msg = document.querySelector("#modal-cheat .modal-msg");
+        if (msg) msg.innerHTML =
+          `You did not return to the exam within <strong style="color:var(--danger)">10 seconds</strong>.<br/>
+           Your exam has been <strong>automatically submitted</strong>.`;
+      }
+    }, 1000);
+  }
+
+  // ── Student came back — cancel the countdown ──────────────────────
+  function cancelCountdown() {
+    if (!countdownActive) return;
+    stopCountdown();
+    hideCountdownOverlay();
+
+    // Show a brief reassurance modal (reuse warning modal with new text)
+    const remaining = MAX_WARNINGS - warningCount;
+    for (let i = 1; i <= 3; i++) {
+      const pill = document.getElementById("wp-" + i);
+      if (pill) pill.classList.toggle("used", i <= warningCount);
+    }
+    document.getElementById("warn-modal-title").textContent =
+      `✅ Welcome back — Warning ${warningCount}/${MAX_WARNINGS}`;
+    document.getElementById("warn-modal-msg").innerHTML =
+      `You returned in time. Your exam continues.<br/>
+       <strong style="color:var(--danger)">
+         ${remaining} warning${remaining !== 1 ? "s" : ""} remaining
+       </strong> before auto-submit.<br/>
+       <small style="color:var(--muted)">Stay on this tab to avoid further warnings.</small>`;
+    showModal("modal-warning");
+  }
+
+  // ── Internal helpers ──────────────────────────────────────────────
+  function stopCountdown() {
+    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+    countdownActive = false;
+    countdownSecs   = COUNTDOWN_SECS;
+  }
+
+  function showCountdownOverlay(secs) {
+    const overlay  = document.getElementById("countdown-overlay");
+    const numEl    = document.getElementById("cd-number");
+    const ringEl   = document.getElementById("cd-ring");
+    const pillSecs = document.getElementById("cd-pill-secs");
+
+    if (!overlay) return;
+    overlay.classList.add("active");
+
+    // Number
+    if (numEl) {
+      numEl.textContent = Math.max(secs, 0);
+      numEl.classList.remove("pulse-num");
+      void numEl.offsetWidth;
+      numEl.classList.add("pulse-num");
+    }
+
+    // Progress ring: full at 10s, empty at 0s
+    if (ringEl) {
+      const progress = Math.max(secs, 0) / COUNTDOWN_SECS;
+      ringEl.style.strokeDashoffset = RING_FULL * (1 - progress);
+      ringEl.classList.toggle("urgent",   secs <= 5);
+      ringEl.classList.toggle("critical", secs <= 3);
+    }
+
+    // Pill counter
+    if (pillSecs) pillSecs.textContent = Math.max(secs, 0);
+  }
+
+  function hideCountdownOverlay() {
+    const overlay = document.getElementById("countdown-overlay");
+    if (overlay) overlay.classList.remove("active");
+  }
+
+  // ── Update the header warning dots + badge ────────────────────────
+  function updateWarningUI() {
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById("wd-" + i);
+      if (dot) dot.classList.toggle("active", i <= warningCount);
+    }
+    const badge = document.getElementById("warning-text");
+    if (badge) badge.textContent = `${warningCount}/3 warnings`;
+
+    const badgeEl = document.getElementById("warning-badge");
+    if (badgeEl && warningCount > 0) {
+      badgeEl.classList.remove("pulse");
+      void badgeEl.offsetWidth;
+      badgeEl.classList.add("pulse");
+    }
+  }
+
+  // ── KEPT for backward compat (called by closeModal on modal-warning) ──
+  function showWarningModal() { /* no-op — replaced by cancelCountdown() flow */ }
+
+  // ── Event listeners ───────────────────────────────────────────────
+
+  // Tab hidden (switch to another tab)
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      handleTabSwitch();
+    } else {
+      // Student returned to the tab — if countdown is active, it keeps running
+      // so the overlay stays visible and they must click the button
+      // (this is intentional: overlay acts as the "wall" they must pass through)
+    }
+  });
+
+  // Window lost focus (alt-tab, another app, DevTools, etc.)
+  window.addEventListener("blur", () => {
+    handleTabSwitch();
+  });
+
+  // When window regains focus — overlay stays; student must click the button
+  // (no auto-cancel on focus, by design — forces conscious acknowledgement)
+  window.addEventListener("focus", () => {
+    // Overlay stays visible; student must click "I'm Back" to dismiss it
+  });
+
+  // ── Disable right-click ──
+  document.addEventListener("contextmenu", e => e.preventDefault());
+
+  // ── Disable F12, Ctrl+C, Ctrl+V, Ctrl+U, etc. ──
+  document.addEventListener("keydown", e => {
+    if (e.key === "F12") { e.preventDefault(); return; }
+    if (e.ctrlKey && ["c","u","s","p","a"].includes(e.key.toLowerCase())) {
+      // Allow Ctrl+A / Ctrl+C inside text inputs & textareas
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+      e.preventDefault();
+    }
+  });
+
+  // ── Warn before page refresh ──
+  window.addEventListener("beforeunload", e => {
+    if (!submitted) {
+      e.preventDefault();
+      e.returnValue = "Leaving will count as a tab switch. Warnings persist on refresh.";
+    }
+  });
+
+  // ════════════════════════════════════════════════════
+  //  QUESTION RENDERING – handles MCQ, FILL, SHORT
+  // ════════════════════════════════════════════════════
+  const KEYS = ["A","B","C","D","E"];
+
+  function renderQuestion(idx) {
+    const q    = exam.questions[idx];
+    const type = q.type || "MCQ";
+
+    if (statuses[q.id] === "not_visited") statuses[q.id] = "not_answered";
+
+    document.getElementById("q-num").textContent  = idx + 1;
+    document.getElementById("q-text").textContent = q.text;
+
+    // ── Question image (stored as base64 in q.image) ──
+    const qBody    = document.getElementById("q-text").parentElement;
+    const oldImg   = document.getElementById("q-img-block");
+    if (oldImg) oldImg.remove();
+
+    if (q.image) {
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "q-image-wrap";
+      imgWrap.id        = "q-img-block";
+      imgWrap.title     = "Click to enlarge";
+      imgWrap.onclick   = () => openExamLightbox(q.image);
+      imgWrap.innerHTML = `
+        <img src="${q.image}" alt="Question image" />
+        <div class="q-image-caption">🖼 Reference image — click to enlarge</div>`;
+      // Insert before q-text
+      const qText = document.getElementById("q-text");
+      qBody.insertBefore(imgWrap, qText);
+    }
+
+    // Type badge & marks label
+    const badge = document.getElementById("q-type-badge");
+    badge.textContent  = type;
+    badge.className    = `q-type-badge ${type}`;
+
+    const mksEl = document.getElementById("q-marks");
+    if (type === "SHORT") {
+      mksEl.textContent = `📝 ${q.marks || exam.marksPerCorrect} marks (manual)`;
+    } else if (type === "FILL") {
+      mksEl.textContent = `+${q.marks || exam.marksPerCorrect} / no penalty`;
+    } else {
+      mksEl.textContent = `+${exam.marksPerCorrect} / −${exam.negativeMarks}`;
+    }
+
+    const container = document.getElementById("options-container");
+    container.innerHTML = "";
+
+    if (type === "MCQ") {
+      renderMCQ(q, container);
+    } else if (type === "FILL") {
+      renderFILL(q, container);
+    } else if (type === "SHORT") {
+      renderSHORT(q, container);
+    }
+
+    updatePalette();
+    updateProgress();
+  }
+
+  function renderMCQ(q, container) {
+    const opts = document.createElement("div");
+    opts.className = "options";
+    q.options.forEach((opt, i) => {
+      const lbl = document.createElement("label");
+      lbl.className = "option-label" + (answers[q.id] === i ? " selected" : "");
+      lbl.innerHTML = `
+        <input type="radio" name="option" value="${i}" ${answers[q.id] === i ? "checked" : ""}/>
+        <div class="opt-key">${KEYS[i]}</div>
+        <div class="opt-text">${opt}</div>`;
+      lbl.addEventListener("click", () => selectMCQ(q.id, i));
+      opts.appendChild(lbl);
+    });
+    container.appendChild(opts);
+  }
+
+  function renderFILL(q, container) {
+    const currentVal = answers[q.id] || "";
+    container.innerHTML = `
+      <div class="fill-input-wrap">
+        <div class="fill-hint">✏️ Type your answer in the blank below</div>
+        <input
+          type="text"
+          class="fill-input ${currentVal ? 'has-value' : ''}"
+          id="fill-input-field"
+          placeholder="Your answer here…"
+          value="${escapeHtml(currentVal)}"
+          autocomplete="off"
+          spellcheck="true"
+        />
+        <div class="fill-char-count" id="fill-char-count">${currentVal.length} character${currentVal.length !== 1 ? 's' : ''}</div>
+      </div>`;
+
+    const inp = document.getElementById("fill-input-field");
+    inp.addEventListener("input", () => {
+      const val = inp.value;
+      answers[q.id] = val;
+      statuses[q.id] = val.trim() ? "answered" : "not_answered";
+      inp.classList.toggle("has-value", val.trim().length > 0);
+      document.getElementById("fill-char-count").textContent =
+        `${val.length} character${val.length !== 1 ? 's' : ''}`;
+      updatePalette();
+      updateProgress();
+    });
+  }
+
+  function renderSHORT(q, container) {
+    const currentVal = answers[q.id] || "";
+    const wordCount  = currentVal.trim() ? currentVal.trim().split(/\s+/).length : 0;
+    container.innerHTML = `
+      <div class="pending-badge">⏳ Manually Evaluated — Marks awarded after review</div>
+      <div class="short-hint">
+        📝 Write a detailed answer. Your teacher will review and assign marks.
+      </div>
+      <textarea
+        class="short-textarea ${currentVal ? 'has-value' : ''}"
+        id="short-textarea-field"
+        placeholder="Write your answer here in 2–5 sentences…"
+        spellcheck="true"
+      >${escapeHtml(currentVal)}</textarea>
+      <div class="short-word-count" id="short-word-count">${wordCount} word${wordCount !== 1 ? 's' : ''}</div>`;
+
+    const ta = document.getElementById("short-textarea-field");
+    ta.addEventListener("input", () => {
+      const val = ta.value;
+      answers[q.id] = val;
+      statuses[q.id] = val.trim() ? "answered" : "not_answered";
+      ta.classList.toggle("has-value", val.trim().length > 0);
+      const wc = val.trim() ? val.trim().split(/\s+/).length : 0;
+      document.getElementById("short-word-count").textContent =
+        `${wc} word${wc !== 1 ? 's' : ''}`;
+      updatePalette();
+      updateProgress();
+    });
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+  }
+
+  // ── Select MCQ answer ──
+  function selectMCQ(qId, optIdx) {
+    answers[qId]  = optIdx;
+    statuses[qId] = "answered";
+    document.querySelectorAll(".option-label").forEach((lbl, i) => {
+      lbl.classList.toggle("selected", i === optIdx);
+    });
+    updatePalette();
+    updateProgress();
+  }
+
+  // ── Clear answer ──
+  function clearAnswer() {
+    const q    = exam.questions[currentQ];
+    const type = q.type || "MCQ";
+    answers[q.id]  = (type === "MCQ") ? -1 : "";
+    statuses[q.id] = "not_answered";
+    renderQuestion(currentQ);
+  }
+
+  // ── Mark for review ──
+  function markForReview() {
+    const q = exam.questions[currentQ];
+    statuses[q.id] = "review";
+    updatePalette();
+    updateProgress();
+    toast("Marked for review.", "info");
+    if (currentQ < exam.questions.length - 1) navigate(1);
+  }
+
+  // ── Navigation ──
+  function navigate(delta) {
+    const next = currentQ + delta;
+    if (next < 0 || next >= exam.questions.length) return;
+    currentQ = next;
+    renderQuestion(currentQ);
+  }
+
+  function jumpTo(idx) {
+    currentQ = idx;
+    renderQuestion(currentQ);
+  }
+
+  // ════════════════════════════════════════════════════
+  //  PALETTE & PROGRESS
+  // ════════════════════════════════════════════════════
+  function updatePalette() {
+    const grid = document.getElementById("palette-grid");
+    grid.innerHTML = "";
+    exam.questions.forEach((q, i) => {
+      const type   = q.type || "MCQ";
+      const bubble = document.createElement("div");
+      bubble.className = `q-bubble ${statuses[q.id]}${i === currentQ ? " current" : ""}`;
+      bubble.dataset.type = type;
+      bubble.textContent  = i + 1;
+      bubble.title = `Q${i+1} [${type}]: ${statuses[q.id].replace("_"," ")}`;
+      bubble.onclick = () => jumpTo(i);
+      grid.appendChild(bubble);
+    });
+  }
+
+  function updateProgress() {
+    const vals = Object.values(statuses);
+    document.getElementById("prog-answered").textContent   = vals.filter(s => s === "answered").length;
+    document.getElementById("prog-unanswered").textContent = vals.filter(s => s === "not_answered").length;
+    document.getElementById("prog-review").textContent     = vals.filter(s => s === "review").length;
+    document.getElementById("prog-notvisited").textContent = vals.filter(s => s === "not_visited").length;
+
+    // Count pending short answers (answered but awaiting manual eval)
+    const shortPending = exam.questions.filter(q =>
+      (q.type || "MCQ") === "SHORT" && statuses[q.id] === "answered"
+    ).length;
+    document.getElementById("prog-pending").textContent = shortPending;
+  }
+
+  // ════════════════════════════════════════════════════
+  //  COUNTDOWN TIMER
+  // ════════════════════════════════════════════════════
+  function startTimer() {
+    timerInterval = setInterval(() => {
+      timerSecs--;
+      const el = document.getElementById("timer");
+      const m  = Math.floor(timerSecs / 60);
+      const s  = timerSecs % 60;
+      el.textContent = `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+      el.className = "timer-display";
+      if (timerSecs <= 60)  el.classList.add("danger");
+      else if (timerSecs <= 300) el.classList.add("warning");
+      if (timerSecs <= 0) {
+        clearInterval(timerInterval);
+        submitExam("timeout");
+      }
+    }, 1000);
+  }
+
+  // ════════════════════════════════════════════════════
+  //  SUBMIT EXAM
+  // ════════════════════════════════════════════════════
+  function confirmSubmit() {
+    const unanswered = exam.questions.filter(q => {
+      const type = q.type || "MCQ";
+      if (type === "MCQ")   return answers[q.id] === -1;
+      return !answers[q.id] || !answers[q.id].trim();
+    }).length;
+    const shortCount = exam.questions.filter(q => (q.type||"MCQ") === "SHORT").length;
+
+    document.getElementById("modal-submit-msg").innerHTML =
+      `You have <strong>${unanswered} unanswered</strong> question(s).<br/>` +
+      (shortCount > 0
+        ? `<span style="color:var(--orange)">📝 ${shortCount} short answer(s) will be manually evaluated by your teacher.</span><br/>`
+        : "") +
+      `Submit and see your result?`;
+    showModal("modal-submit");
+  }
+
+  function submitExam(reason) {
+    if (submitted) return;
+    submitted = true;
+    clearInterval(timerInterval);
+    window.onbeforeunload = null;
+
+    // Clear warnings on successful submit
+    localStorage.removeItem(WARNING_KEY);
+
+    const scoreData = calculateScore(exam, answers);
+    const result = {
+      id:                  "res_" + Date.now(),
+      userId:              user.userId,
+      examId:              exam.id,
+      answers:             { ...answers },
+      ...scoreData,
+      reason,
+      submittedAt:         new Date().toISOString()
+    };
+
+    saveResult(result);
+    sessionStorage.setItem("ep_last_result", JSON.stringify(result));
+    sessionStorage.setItem("ep_last_exam",   JSON.stringify(exam));
+
+    if (reason === "manual") goToResult();
+    // For tab_switch / tab_switch_timeout — cheat modal handles navigation
+    if (reason === "timeout") goToResult();
+  }
+
+  function goToResult() {
+    window.location.href = "result.html";
+  }
+
+  // ════════════════════════════════════════════════════
+  //  MODAL HELPERS
+  // ════════════════════════════════════════════════════
+  function showModal(id)  { document.getElementById(id).classList.add("show"); }
+  function closeModal(id) { document.getElementById(id).classList.remove("show"); }
+
+
+  // ── KICK OFF ──
+  renderQuestion(0);
+  startTimer();
+
+  // ── Exam image lightbox ──
+  function openExamLightbox(src) {
+    const lb = document.getElementById("exam-img-lightbox");
+    lb.querySelector("img").src = src;
+    lb.classList.add("open");
+  }
+  function closeExamLightbox() {
+    const lb = document.getElementById("exam-img-lightbox");
+    lb.classList.remove("open");
+    lb.querySelector("img").src = "";
+  }
+</script>
+
+<!-- ── EXAM IMAGE LIGHTBOX ── -->
+<div id="exam-img-lightbox" onclick="closeExamLightbox()">
+  <button class="elb-close" onclick="closeExamLightbox()">✕</button>
+  <img src="" alt="Question image" onclick="event.stopPropagation()" />
+</div>
+
+</body>
+</html>

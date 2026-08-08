@@ -1,0 +1,58 @@
+<!--
+title: Publications | Dr. Mehbub Alam
+description: Complete list of peer-reviewed journal articles and conference papers by Dr. Mehbub Alam, with official publisher links, DOIs, abstracts, slide summaries and citation details for every paper.
+output: publications.html
+nav: publications
+-->
+
+<section class="section section--tight section--warm">
+    <div class="wrap">
+        <div class="section-head">
+            <p class="eyebrow">Bibliography</p>
+            <h1>Publications</h1>
+            <p>{{count_publications}} peer-reviewed publications — {{count_journals}} journal articles and
+                {{count_conferences}} conference papers — plus earlier research work. Every entry links to a
+                dedicated page with the abstract, research highlights, a slide summary where available, and
+                ready-to-copy citations.</p>
+        </div>
+
+        <div class="btn-row" style="margin-bottom:1.75rem">
+            <a class="btn btn--ghost btn--sm" href="https://scholar.google.com/citations?user=BFOhVCkAAAAJ" target="_blank" rel="noopener noreferrer">
+                <span>Google Scholar</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+                <span class="visually-hidden"> (opens in a new tab)</span>
+            </a>
+            <a class="btn btn--ghost btn--sm" href="https://orcid.org/0000-0003-0329-8765" target="_blank" rel="noopener noreferrer">
+                <span>ORCID</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+                <span class="visually-hidden"> (opens in a new tab)</span>
+            </a>
+            <a class="btn btn--ghost btn--sm" href="https://www.researchgate.net/profile/Mehbub-Alam-2" target="_blank" rel="noopener noreferrer">
+                <span>ResearchGate</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+                <span class="visually-hidden"> (opens in a new tab)</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section section--tight section--flush-top section--main" aria-label="Publication list">
+    <div class="wrap">
+        <div class="pub-toolbar" data-pub-filter role="group" aria-label="Filter publications by type">
+            <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="filter-btn" type="button" data-filter="journal" aria-pressed="false">Journal articles</button>
+            <button class="filter-btn" type="button" data-filter="conference" aria-pressed="false">Conference papers</button>
+            <button class="filter-btn" type="button" data-filter="other" aria-pressed="false">Other works</button>
+            <p class="pub-count" aria-live="polite"></p>
+        </div>
+
+{{publications_all}}
+
+        <div class="callout" style="margin-top:2.5rem">
+            <p class="tiny"><strong>About the links.</strong> Where a paper is available from a publisher,
+                the <em>Publisher Page</em> and <em>DOI</em> buttons point to the official record on IEEE Xplore,
+                ScienceDirect, SpringerLink or Nature. Full-text PDFs are linked only where the publisher offers
+                them openly; otherwise please use the publisher page, which may require a subscription.</p>
+        </div>
+    </div>
+</section>

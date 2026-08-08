@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExamPortal – Result</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy:   #0D1B2A;
+      --blue:   #2563EB;
+      --blue-lt:#3B82F6;
+      --success:#059669;
+      --danger: #DC2626;
+      --warning:#D97706;
+      --orange: #EA580C;
+      --text:   #0F172A;
+      --muted:  #64748B;
+      --border: #E2E8F0;
+      --card:   #FFFFFF;
+      --bg:     #F0F5FF;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); }
+
+    .header {
+      background:var(--navy); height:60px;
+      display:flex; align-items:center; justify-content:space-between; padding:0 2rem;
+    }
+    .brand {
+      font-family:'Outfit',sans-serif; font-weight:700; color:#fff;
+      font-size:1.1rem; text-decoration:none;
+    }
+    .brand span { color:var(--blue-lt); }
+    .btn-home {
+      padding:0.5rem 1.1rem; background:var(--blue); color:#fff;
+      border:none; border-radius:8px; font-family:'Outfit',sans-serif;
+      font-size:0.88rem; font-weight:600; cursor:pointer;
+      text-decoration:none; transition:background 0.2s;
+    }
+    .btn-home:hover { background:#1D4ED8; }
+
+    .main { max-width:880px; margin:0 auto; padding:2.5rem 1.5rem; }
+
+    /* ── HERO RESULT CARD ── */
+    .result-hero {
+      border-radius:20px; overflow:hidden; margin-bottom:2rem;
+      box-shadow:0 8px 30px rgba(0,0,0,0.08);
+    }
+    .result-hero-top {
+      padding:2.5rem;
+      display:flex; flex-direction:column; align-items:center; gap:0.75rem;
+      text-align:center;
+    }
+    .result-badge    { font-size:4rem; line-height:1; margin-bottom:0.5rem; }
+    .result-verdict  {
+      font-family:'Outfit',sans-serif; font-size:2rem; font-weight:800;
+      letter-spacing:-0.02em;
+    }
+    .result-exam-name { font-size:1rem; opacity:0.7; }
+    .result-score-big {
+      font-family:'Outfit',sans-serif; font-size:3.5rem; font-weight:800;
+      letter-spacing:-0.03em; margin-top:0.5rem;
+    }
+    .result-score-big small { font-size:1.2rem; opacity:0.6; font-weight:400; }
+    .result-reason   { font-size:0.82rem; opacity:0.6; font-style:italic; margin-top:0.25rem; }
+
+    .stats-row {
+      display:grid; grid-template-columns:repeat(4,1fr);
+      background:rgba(255,255,255,0.15); border-top:1px solid rgba(255,255,255,0.2);
+    }
+    .stat-cell {
+      padding:1.2rem; text-align:center;
+      border-right:1px solid rgba(255,255,255,0.2);
+    }
+    .stat-cell:last-child { border-right:none; }
+    .stat-cell-val {
+      font-family:'Outfit',sans-serif; font-size:1.8rem; font-weight:700;
+      margin-bottom:0.2rem;
+    }
+    .stat-cell-lbl { font-size:0.75rem; opacity:0.65; text-transform:uppercase; letter-spacing:0.04em; }
+
+    /* ── PENDING EVALUATION NOTICE ── */
+    .pending-notice {
+      background:#FFF7ED; border:1.5px solid #FED7AA; border-radius:14px;
+      padding:1.25rem 1.5rem; margin-bottom:2rem;
+      display:flex; align-items:flex-start; gap:1rem;
+    }
+    .pending-notice-icon { font-size:2rem; flex-shrink:0; }
+    .pending-notice-title {
+      font-family:'Outfit',sans-serif; font-weight:700; color:#9A3412;
+      margin-bottom:0.3rem;
+    }
+    .pending-notice-sub { font-size:0.85rem; color:#C2410C; }
+
+    /* ── SCORE BREAKDOWN ── */
+    .section-title {
+      font-family:'Outfit',sans-serif; font-size:1.15rem; font-weight:700;
+      color:var(--text); margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;
+    }
+    .score-bar-card {
+      background:var(--card); border-radius:14px; border:1px solid var(--border);
+      padding:1.5rem; margin-bottom:2rem;
+    }
+    .score-breakdown-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.25rem;
+    }
+    .score-breakdown-cell {
+      background:#F8FAFC; border-radius:10px; padding:1rem;
+      text-align:center; border:1px solid var(--border);
+    }
+    .score-breakdown-cell.highlight { background:#EFF6FF; border-color:#93C5FD; }
+    .sbc-val {
+      font-family:'Outfit',sans-serif; font-size:1.4rem; font-weight:700;
+      margin-bottom:0.25rem;
+    }
+    .sbc-lbl { font-size:0.75rem; color:var(--muted); }
+    .score-bar-track {
+      height:14px; border-radius:7px; background:#F1F5F9; overflow:hidden; margin-bottom:1rem;
+    }
+    .score-bar-fill { height:100%; border-radius:7px; transition:width 1.2s cubic-bezier(0.25,1,0.5,1); }
+    .score-meta {
+      display:flex; justify-content:space-between; align-items:center;
+      font-size:0.82rem; color:var(--muted);
+    }
+
+    /* ── ANSWER REVIEW ── */
+    .review-card {
+      background:var(--card); border-radius:14px; border:1px solid var(--border);
+      overflow:hidden;
+    }
+    .review-header {
+      background:#F8FAFC; border-bottom:1px solid var(--border);
+      padding:1rem 1.5rem;
+      font-family:'Outfit',sans-serif; font-size:0.85rem; font-weight:700;
+      color:var(--text); text-transform:uppercase; letter-spacing:0.04em;
+      display:flex; align-items:center; justify-content:space-between;
+    }
+    .review-item { padding:1.25rem 1.5rem; border-bottom:1px solid var(--border); }
+    .review-item:last-child { border-bottom:none; }
+    .review-q-header {
+      display:flex; align-items:flex-start; gap:0.75rem; margin-bottom:0.9rem;
+    }
+    .review-q-num {
+      width:28px; height:28px; border-radius:7px; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Outfit',sans-serif; font-size:0.78rem; font-weight:700; color:#fff;
+    }
+    .review-q-text { font-size:0.9rem; font-weight:500; line-height:1.5; padding-top:3px; }
+    .review-q-type {
+      font-size:0.65rem; font-weight:700; border-radius:4px; padding:0.1rem 0.4rem;
+      text-transform:uppercase; letter-spacing:0.05em; flex-shrink:0; margin-top:5px;
+    }
+    .review-q-type.MCQ   { background:#EFF6FF; color:#1D4ED8; }
+    .review-q-type.FILL  { background:#ECFDF5; color:#065F46; }
+    .review-q-type.SHORT { background:#FFF7ED; color:#9A3412; }
+
+    /* MCQ review options */
+    .review-options { display:flex; flex-direction:column; gap:0.4rem; margin-left:2.5rem; }
+    .review-opt {
+      padding:0.5rem 0.75rem; border-radius:8px; font-size:0.82rem;
+      display:flex; align-items:center; gap:0.5rem;
+    }
+    .review-opt.correct  { background:#ECFDF5; color:#065F46; border:1px solid #A7F3D0; }
+    .review-opt.wrong    { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; }
+    .review-opt.plain    { background:#F8FAFC; color:var(--muted); border:1px solid var(--border); }
+    .review-opt.skipped  { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; font-style:italic; }
+
+    /* FILL review */
+    .fill-review { margin-left:2.5rem; }
+    .fill-answer-box {
+      padding:0.75rem 1rem; border-radius:8px; font-size:0.88rem;
+      margin-bottom:0.4rem; display:flex; align-items:center; gap:0.5rem;
+    }
+    .fill-answer-box.correct  { background:#ECFDF5; color:#065F46; border:1px solid #A7F3D0; }
+    .fill-answer-box.wrong    { background:#FEF2F2; color:#991B1B; border:1px solid #FECACA; }
+    .fill-answer-box.skipped  { background:#FFFBEB; color:#92400E; border:1px solid #FDE68A; font-style:italic; }
+    .fill-correct-ans {
+      padding:0.4rem 0.75rem; border-radius:6px; font-size:0.78rem;
+      background:#ECFDF5; color:#065F46; border:1px dashed #A7F3D0;
+    }
+
+    /* SHORT review */
+    .short-review { margin-left:2.5rem; }
+    .short-answer-box {
+      padding:0.85rem 1rem; border-radius:8px; font-size:0.87rem;
+      line-height:1.6; background:#FFFBEB; border:1px solid #FDE68A;
+      color:var(--text); margin-bottom:0.5rem; white-space:pre-wrap;
+    }
+    .short-answer-box.skipped {
+      background:#F8FAFC; border-color:var(--border);
+      color:var(--muted); font-style:italic;
+    }
+    .short-eval-box {
+      padding:0.75rem 1rem; border-radius:8px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:0.5rem;
+    }
+    .short-eval-box.pending {
+      background:#FFF7ED; border:1px solid #FED7AA; color:#9A3412;
+    }
+    .short-eval-box.evaluated {
+      background:#ECFDF5; border:1px solid #A7F3D0; color:#065F46;
+    }
+    .short-marks {
+      font-family:'Outfit',sans-serif; font-weight:700; font-size:1rem;
+    }
+    .short-feedback {
+      font-size:0.8rem; color:var(--muted); font-style:italic; margin-top:0.35rem;
+    }
+
+    @media(max-width:640px){
+      .stats-row { grid-template-columns:repeat(2,1fr); }
+      .result-score-big { font-size:2.5rem; }
+      .score-breakdown-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <a href="dashboard.html" class="brand">📋 Exam<span>Portal</span></a>
+  <a href="dashboard.html" class="btn-home">← Back to Dashboard</a>
+</div>
+
+<div class="main">
+
+  <!-- HERO CARD -->
+  <div class="result-hero" id="result-hero"></div>
+
+  <!-- PENDING EVALUATION NOTICE (shown only if short answers exist) -->
+  <div class="pending-notice" id="pending-notice" style="display:none">
+    <div class="pending-notice-icon">📝</div>
+    <div>
+      <div class="pending-notice-title">Short Answer Evaluation Pending</div>
+      <div class="pending-notice-sub" id="pending-notice-msg">
+        Your short answer questions are being reviewed by your teacher. Your final score will be updated once evaluation is complete.
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORE BREAKDOWN -->
+  <div class="section-title"><span>📊</span> Score Breakdown</div>
+  <div class="score-bar-card">
+    <div class="score-breakdown-grid" id="score-breakdown-grid"></div>
+    <div class="score-bar-track">
+      <div class="score-bar-fill" id="score-bar" style="width:0%"></div>
+    </div>
+    <div class="score-meta">
+      <span id="score-pct-label">0% scored</span>
+      <span id="score-pass-label">Passing: 0 marks</span>
+    </div>
+  </div>
+
+  <!-- ANSWER REVIEW -->
+  <div class="section-title"><span>📝</span> Answer Review</div>
+  <div class="review-card">
+    <div class="review-header">
+      Question-by-Question Analysis
+      <div style="display:flex;gap:0.5rem">
+        <span style="font-size:0.72rem;background:#EFF6FF;color:#1D4ED8;border-radius:4px;padding:0.2rem 0.5rem">MCQ</span>
+        <span style="font-size:0.72rem;background:#ECFDF5;color:#065F46;border-radius:4px;padding:0.2rem 0.5rem">FILL</span>
+        <span style="font-size:0.72rem;background:#FFF7ED;color:#9A3412;border-radius:4px;padding:0.2rem 0.5rem">SHORT</span>
+      </div>
+    </div>
+    <div id="review-body">Loading…</div>
+  </div>
+
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  requireAuth("student");
+
+  // Reload fresh result in case it was updated (manual evaluation)
+  let result = JSON.parse(sessionStorage.getItem("ep_last_result") || "{}");
+  const exam = JSON.parse(sessionStorage.getItem("ep_last_exam")   || "{}");
+
+  // Try to load updated result from localStorage
+  if (result.id) {
+    const freshResults = JSON.parse(localStorage.getItem("ep_results") || "[]");
+    const freshResult  = freshResults.find(r => r.id === result.id);
+    if (freshResult) result = freshResult;
+  }
+
+  if (!result.examId) {
+    window.location.href = "dashboard.html";
+  }
+
+  const KEYS = ["A","B","C","D","E"];
+  const shortAnswerDetails = result.shortAnswerDetails || {};
+  const hasPending = result.pendingCount > 0;
+  const finalScore = result.finalScore || result.score;
+  const maxScore   = result.maxScore;
+  const pct        = Math.round((finalScore / maxScore) * 100);
+  const colour     = result.passed ? "#059669" : "#DC2626";
+  const bgGrad     = result.passed
+    ? "linear-gradient(135deg,#065F46,#059669)"
+    : "linear-gradient(135deg,#7F1D1D,#DC2626)";
+
+  const reasonText = {
+    manual:       "Submitted manually",
+    timeout:      "⏱ Time ran out — auto-submitted",
+    tab_switch:   "⚠️ Tab switch detected — auto-submitted",
+    window_blur:  "⚠️ Window lost focus — auto-submitted"
+  };
+
+  /* ── Hero card ── */
+  document.getElementById("result-hero").innerHTML = `
+    <div class="result-hero-top" style="background:${bgGrad};color:#fff">
+      <div class="result-badge">${result.passed ? "🏆" : "📉"}</div>
+      <div class="result-verdict">${result.passed ? "Congratulations!" : "Better Luck Next Time"}</div>
+      <div class="result-exam-name">${exam.title || "Exam"}</div>
+      <div class="result-score-big">${finalScore} <small>/ ${maxScore}</small></div>
+      ${hasPending ? `<div style="font-size:0.82rem;opacity:0.85;background:rgba(0,0,0,0.2);border-radius:6px;padding:0.25rem 0.75rem">⏳ Final score pending short answer evaluation</div>` : ""}
+      <div class="result-reason">${reasonText[result.reason] || ""}</div>
+    </div>
+    <div class="stats-row" style="color:#fff">
+      <div class="stat-cell">
+        <div class="stat-cell-val">${result.total}</div>
+        <div class="stat-cell-lbl">Total Qs</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-val">${result.correct}</div>
+        <div class="stat-cell-lbl">Correct</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-val">${result.wrong}</div>
+        <div class="stat-cell-lbl">Wrong</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-cell-val">${result.skipped}</div>
+        <div class="stat-cell-lbl">Skipped</div>
+      </div>
+    </div>`;
+
+  /* ── Pending notice ── */
+  if (hasPending) {
+    document.getElementById("pending-notice").style.display = "flex";
+    const evaluated = Object.values(shortAnswerDetails).filter(s => s.status === "evaluated").length;
+    const totalShort = result.pendingCount;
+    document.getElementById("pending-notice-msg").textContent =
+      `${totalShort - evaluated} of ${totalShort} short answer(s) are awaiting teacher review. ` +
+      `Your auto-evaluated score is ${result.score}/${maxScore}. Final score will be updated.`;
+  }
+
+  /* ── Score breakdown grid ── */
+  const autoScore  = result.score;
+  const shortTotal = result.shortAnswerMarksTotal || 0;
+  document.getElementById("score-breakdown-grid").innerHTML = `
+    <div class="score-breakdown-cell">
+      <div class="sbc-val" style="color:var(--blue)">${autoScore}</div>
+      <div class="sbc-lbl">MCQ + Fill Score (Auto)</div>
+    </div>
+    <div class="score-breakdown-cell">
+      <div class="sbc-val" style="color:var(--orange)">${shortTotal}</div>
+      <div class="sbc-lbl">Short Answer Score${hasPending && !result.allShortEvaluated ? " (Partial)" : ""}</div>
+    </div>
+    <div class="score-breakdown-cell highlight">
+      <div class="sbc-val" style="color:var(--blue)">${finalScore}</div>
+      <div class="sbc-lbl">Final Score / ${maxScore}</div>
+    </div>`;
+
+  /* ── Score bar ── */
+  document.getElementById("score-pct-label").textContent  = `${pct}% scored`;
+  document.getElementById("score-pass-label").textContent = `Passing: ${exam.passingMarks} marks`;
+  requestAnimationFrame(() => {
+    const bar = document.getElementById("score-bar");
+    bar.style.background = colour;
+    bar.style.width       = pct + "%";
+  });
+
+  /* ── Answer review ── */
+  const body = document.getElementById("review-body");
+  body.innerHTML = "";
+
+  (exam.questions || []).forEach((q, i) => {
+    const type     = q.type || "MCQ";
+    const userAns  = result.answers ? result.answers[q.id] : (type === "MCQ" ? -1 : "");
+
+    let isCorrect = false, isSkipped = false;
+    if (type === "MCQ") {
+      isSkipped = userAns === -1 || userAns === undefined || userAns === null;
+      isCorrect = !isSkipped && (userAns === q.correct);
+    } else if (type === "FILL") {
+      isSkipped = !userAns || !userAns.trim();
+      if (!isSkipped) {
+        isCorrect = userAns.trim().toLowerCase() === (q.correct_answer || "").trim().toLowerCase();
+      }
+    } else if (type === "SHORT") {
+      isSkipped = !userAns || !userAns.trim();
+    }
+
+    const numColour = (type === "SHORT")
+      ? "#EA580C"
+      : (isSkipped ? "#D97706" : isCorrect ? "#059669" : "#DC2626");
+
+    const item = document.createElement("div");
+    item.className = "review-item";
+
+    let contentHtml = "";
+
+    if (type === "MCQ") {
+      const optsHtml = q.options.map((opt, j) => {
+        let cls = "plain", prefix = KEYS[j] + ". ";
+        if (j === q.correct) { cls = "correct"; prefix = "✓ " + prefix; }
+        else if (j === userAns && !isCorrect) { cls = "wrong"; prefix = "✕ " + prefix; }
+        return `<div class="review-opt ${cls}">${prefix}${opt}</div>`;
+      }).join("");
+      const skippedTag = isSkipped
+        ? `<div class="review-opt skipped">— Skipped (no marks deducted)</div>` : "";
+      contentHtml = `<div class="review-options">${skippedTag}${optsHtml}</div>`;
+
+    } else if (type === "FILL") {
+      if (isSkipped) {
+        contentHtml = `<div class="fill-review">
+          <div class="fill-answer-box skipped">— Skipped</div>
+          <div class="fill-correct-ans">✓ Correct answer: <strong>${q.correct_answer}</strong></div>
+        </div>`;
+      } else {
+        const ansClass = isCorrect ? "correct" : "wrong";
+        const ansIcon  = isCorrect ? "✓" : "✕";
+        contentHtml = `<div class="fill-review">
+          <div class="fill-answer-box ${ansClass}">${ansIcon} Your answer: <strong>${escapeHtml(String(userAns))}</strong></div>
+          ${!isCorrect ? `<div class="fill-correct-ans">✓ Correct answer: <strong>${q.correct_answer}</strong></div>` : ""}
+        </div>`;
+      }
+
+    } else if (type === "SHORT") {
+      const evalData = shortAnswerDetails[q.id];
+      const ansHtml  = isSkipped
+        ? `<div class="short-answer-box skipped">— No answer provided</div>`
+        : `<div class="short-answer-box">${escapeHtml(String(userAns))}</div>`;
+
+      let evalHtml = "";
+      if (isSkipped) {
+        evalHtml = `<div class="short-eval-box pending">⏭ Skipped – not evaluated</div>`;
+      } else if (evalData && evalData.status === "evaluated") {
+        evalHtml = `<div class="short-eval-box evaluated">
+          <div>
+            <div>✓ Evaluated by teacher</div>
+            ${evalData.feedback ? `<div class="short-feedback">💬 ${escapeHtml(evalData.feedback)}</div>` : ""}
+          </div>
+          <div class="short-marks">${evalData.marks} / ${evalData.maxMarks || q.marks || ""} marks</div>
+        </div>`;
+      } else {
+        evalHtml = `<div class="short-eval-box pending">
+          <div>⏳ Awaiting teacher evaluation</div>
+          <div class="short-marks" style="color:var(--orange)">? / ${q.marks || ""} marks</div>
+        </div>`;
+      }
+
+      contentHtml = `<div class="short-review">${ansHtml}${evalHtml}</div>`;
+    }
+
+    item.innerHTML = `
+      <div class="review-q-header">
+        <div class="review-q-num" style="background:${numColour}">${i+1}</div>
+        <div class="review-q-text">${q.text}</div>
+        <span class="review-q-type ${type}">${type}</span>
+      </div>
+      ${contentHtml}`;
+
+    body.appendChild(item);
+  });
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+  }
+</script>
+</body>
+</html>
